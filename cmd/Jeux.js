@@ -1,6 +1,12 @@
 const { ovlcmd } = require('../lib/ovlcmd');
 const animeQuestions = require('../lib/aquizz.json');
 const extraQuiz = require('../lib/quiz_nouveaux.json');
+let Sudo;
+try {
+  ({ Sudo } = require('../DataBase/sudo'));
+} catch (_) {
+  Sudo = null;
+}
 
 const QUIZ_LENGTHS = { '1': 10, '2': 20, '3': 30 };
 const ANSWERS = ['1', '2', '3', '4'];
@@ -167,6 +173,44 @@ async function resolveSender(received, groupId, sock, getJid) {
   return rawSender;
 }
 
+function isStopCommand(value) {
+  return ['stop', '.stop', 'annuler', 'cancel'].includes(clean(value));
+}
+
+async function isGroupAdmin(sock, groupId, userId) {
+  if (!sock || typeof sock.groupMetadata !== 'function' || !userId) return false;
+  try {
+    const metadata = await sock.groupMetadata(groupId);
+    const userNumber = senderName(userId);
+    return (metadata.participants || []).some((participant) => {
+      const participantId = participant.id || participant.jid || participant.phoneNumber;
+      return participantId && senderName(participantId) === userNumber && ['admin', 'superadmin'].includes(participant.admin);
+    });
+  } catch (_) {
+    return false;
+  }
+}
+
+async function isSudoUser(userId) {
+  if (!userId) return false;
+  const candidates = [userId, senderName(userId)];
+  if (Sudo && typeof Sudo.findByPk === 'function') {
+    for (const candidate of candidates) {
+      try {
+        if (await Sudo.findByPk(candidate)) return true;
+      } catch (_) {
+        // La base peut ne pas être initialisée au moment du premier message.
+      }
+    }
+  }
+  const configured = String(process.env.SUDO || process.env.SUDOS || process.env.NUMERO_OWNER || '').split(',').map((item) => item.trim()).filter(Boolean);
+  return configured.some((item) => senderName(item) === senderName(userId));
+}
+
+async function canStopGame(sock, groupId, userId) {
+  return await isSudoUser(userId) || await isGroupAdmin(sock, groupId, userId);
+}
+
 function sameUser(first, second) {
   if (!first || !second) return false;
   if (first === second) return true;
@@ -207,7 +251,7 @@ async function runQuiz(groupId, sock, game, getJid) {
       const answer = clean(extractText(received));
       const player = await resolveSender(received, groupId, sock, getJid);
       if (!player) continue;
-      if (answer === 'stop' && sameUser(player, game.starter)) {
+      if (isStopCommand(answer) && (sameUser(player, game.starter) || await canStopGame(sock, groupId, player))) {
         endGame(groupId);
         await send(sock, groupId, `🛑 Quizz annulé par @${senderName(player)}.`, [player]);
         return;
@@ -265,14 +309,21 @@ async function chooseQuizLength(groupId, sock, setup, definition, getJid) {
     if (!received) break;
     const player = await resolveSender(received, groupId, sock, getJid);
     if (!player) continue;
-    if (!sameUser(player, setup.starter)) {
-      await send(sock, groupId, `⏳ Seul @${senderName(setup.starter)} peut choisir le nombre de questions.`, [setup.starter]);
+    const answer = clean(extractText(received));
+    if (isStopCommand(answer)) {
+      if (sameUser(player, setup.starter) || await canStopGame(sock, groupId, player)) {
+        endGame(groupId);
+        await send(sock, groupId, `🛑 Quizz annulé par @${senderName(player)}.`, [player]);
+        return;
+      }
       continue;
     }
-    const selection = QUIZ_LENGTHS[clean(extractText(received))];
+    if (!sameUser(player, setup.starter)) continue;
+    const selection = QUIZ_LENGTHS[answer];
     if (!selection) {
-      await send(sock, groupId, '❌ Choix invalide. Réponds uniquement avec 1, 2 ou 3.');
-      continue;
+      await send(sock, groupId, '❌ Choix invalide. Le quizz est annulé. Réponds avec 1, 2 ou 3 la prochaine fois.');
+      endGame(groupId);
+      return;
     }
     await startQuiz(groupId, sock, { ...definition, mode: setup.mode }, selection, setup.starter, getJid);
     return;
@@ -345,10 +396,12 @@ ovlcmd({
     '• `.quizz-gaming` — quiz jeux vidéo\n' +
     '• `.quizz-cultire-g` — culture générale\n' +
     '• `.quizz-foot` — quiz football\n' +
+    '• `.akinator` — deviner un personnage avec Akinator\n' +
     '• `.pendu` — pendu collaboratif\n' +
     '• `.anagramme` — mot mélangé à deviner\n' +
     '• `.scorejeux` — scores du groupe\n' +
-    '• `.stopjeu` — arrêter la partie active\n\n' +
+    '• `.stopjeu` — arrêter la partie active\n' +
+    '• `.stopakinator` — arrêter Akinator\n\n' +
     'Après le lancement, le créateur choisit 1, 2 ou 3. Ensuite, tout le groupe répond avec 1, 2, 3 ou 4.');
 });
 

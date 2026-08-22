@@ -242,6 +242,10 @@ NOM_BOT=🤖 OVL-MD BOT V2
 
 Le bot inclut désormais des jeux jouables à plusieurs dans un groupe : `.pendu` et `.anagramme`. Les quizz se lancent avec `.quizz-anime`, `.quizz-gaming`, `.quizz-cultire-g` ou `.quizz-foot` ; `.quizz-culture-g` et les anciens noms restent également acceptés comme alias. Après le lancement, la personne qui a lancé le quizz choisit 1, 2 ou 3 pour jouer respectivement 10, 20 ou 30 questions. Tout le groupe répond ensuite uniquement avec 1, 2, 3 ou 4. Chaque question reste ouverte 10 secondes, la bonne réponse est révélée brièvement et la suivante arrive après 2 secondes. Utilise `.jeux` pour afficher l’aide, `.scorejeux` pour consulter le classement et `.stopjeu` pour arrêter une partie. Les parties et les scores sont conservés en mémoire et sont réinitialisés lors d’un redémarrage du bot.
 
+### 🧞 Akinator
+
+La commande `.akinator` lance une partie Akinator en français dans un groupe. Les participants répondent avec `1` pour Oui, `2` pour Non, `3` pour Je ne sais pas, `4` pour Probablement oui ou `5` pour Probablement non. Quand Akinator propose un personnage, le groupe répond `oui` ou `non`. Le créateur, un administrateur ou un sudo peut envoyer `stop`, `.stopakinator` ou utiliser `.stopakinator` pour arrêter la partie. Une seule partie Akinator peut être active par groupe.
+
 ### 🌍 Rejoins la Communauté OVL
 
 [![WhatsApp Support](https://img.shields.io/badge/Support%20WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/BP1oOMh0QvR7H3vvO9bRYK)
