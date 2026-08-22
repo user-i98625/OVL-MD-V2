@@ -2,38 +2,24 @@ const { ovlcmd } = require('../lib/ovlcmd');
 const animeQuestions = require('../lib/aquizz.json');
 const extraQuiz = require('../lib/quiz_nouveaux.json');
 
-const animePool = animeQuestions;
+const QUIZ_LENGTHS = { '1': 10, '2': 20, '3': 30 };
+const ANSWERS = ['1', '2', '3', '4'];
+const ANSWER_KEYS = ['a', 'b', 'c', 'd'];
 const activeGames = new Map();
 const groupScores = new Map();
+
+const quizDefinitions = {
+  anime: { label: 'Anime', bank: animeQuestions },
+  gaming: { label: 'Gaming', bank: extraQuiz.gaming },
+  culture: { label: 'Culture générale', bank: extraQuiz.culture },
+  football: { label: 'Football', bank: extraQuiz.football }
+};
 
 const hangmanWords = [
   'NARUTO', 'KONOHA', 'AKATSUKI', 'RASENGAN', 'SHARINGAN', 'HOKAGE',
   'LUFFY', 'ZORO', 'PIRATE', 'WANO', 'DEMONSLAYER', 'NICHIRIN',
   'HASHIRA', 'MUZAN', 'GOJO', 'SUKUNA', 'JUJUTSU', 'QUIRK', 'POKEMON',
   'PIKACHU', 'ALCHIMIE', 'BANKAI', 'DRAGONBALL', 'SAIYAN', 'TITAN'
-];
-
-const trueFalseQuiz = [
-  { question: 'Naruto est devenu le Septième Hokage.', answer: 'vrai' },
-  { question: 'Luffy est le capitaine de l’équipage du Chapeau de Paille.', answer: 'vrai' },
-  { question: 'Pikachu est un Pokémon de type Feu.', answer: 'faux' },
-  { question: 'Tanjiro utilise principalement la Respiration de l’Eau au début de son aventure.', answer: 'vrai' },
-  { question: 'Light Yagami est le vrai nom de Kira dans Death Note.', answer: 'vrai' },
-  { question: 'Goku est originaire de la planète Namek.', answer: 'faux' },
-  { question: 'Mikasa appartient à la famille Ackerman.', answer: 'vrai' },
-  { question: 'Gojo possède les Six Yeux.', answer: 'vrai' },
-  { question: 'Edward Elric est le frère aîné d’Alphonse.', answer: 'vrai' },
-  { question: 'Nami est l’archéologue de l’équipage de Luffy.', answer: 'faux' },
-  { question: 'Deku est le surnom d’Izuku Midoriya.', answer: 'vrai' },
-  { question: 'Ichigo est un Saiyan.', answer: 'faux' },
-  { question: 'Nezuko est la sœur de Tanjiro.', answer: 'vrai' },
-  { question: 'Saitama est le héros principal de One Punch Man.', answer: 'vrai' },
-  { question: 'Le Death Note appartient à un Shinigami nommé Ryuk.', answer: 'vrai' },
-  { question: 'Vegeta est le frère de Gohan.', answer: 'faux' },
-  { question: 'Asta utilise la magie du vent.', answer: 'faux' },
-  { question: 'Killua vient de la famille Zoldyck.', answer: 'vrai' },
-  { question: 'Anya peut lire les pensées.', answer: 'vrai' },
-  { question: 'Le Titan Colossal est plus petit que le Titan Mâchoire.', answer: 'faux' }
 ];
 
 function clean(value) {
@@ -53,136 +39,297 @@ function isGroup(jid) {
   return typeof jid === 'string' && jid.endsWith('@g.us');
 }
 
-function randomItem(list) {
-  return list[Math.floor(Math.random() * list.length)];
-}
-
 function senderName(jid) {
   return String(jid || 'joueur').split('@')[0];
 }
 
-function addPoint(groupId, playerId) {
-  if (!groupScores.has(groupId)) groupScores.set(groupId, new Map());
-  const scores = groupScores.get(groupId);
-  scores.set(playerId, (scores.get(playerId) || 0) + 1);
-  return scores.get(playerId);
+function randomItem(list) {
+  return list[Math.floor(Math.random() * list.length)];
 }
 
-function scoreboard(groupId) {
-  const scores = groupScores.get(groupId);
-  if (!scores || !scores.size) return 'Aucun point pour le moment.';
-  return [...scores.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
-    .map(([player, score], index) => `${index + 1}. @${senderName(player)} — ${score} point${score > 1 ? 's' : ''}`)
-    .join('\n');
-}
-
-function formatMultipleChoice(item) {
-  return `❓ *${item.question}*\n\n` +
-    `🅰️ ${item.options.a}\n` +
-    `🅱️ ${item.options.b}\n` +
-    `©️ ${item.options.c}\n` +
-    `🆎 ${item.options.d}\n\n` +
-    'Réponds avec `.quiz... a`, `.quiz... b`, `.quiz... c` ou `.quiz... d`.';
-}
-
-async function reply(repondre, message) {
-  await repondre(message);
-}
-
-function clearLater(groupId, timeout = 5 * 60 * 1000) {
-  const game = activeGames.get(groupId);
-  if (game && game.timer) clearTimeout(game.timer);
-  if (game) {
-    game.timer = setTimeout(() => {
-      if (activeGames.get(groupId) === game) endGame(groupId);
-    }, timeout);
+function shuffle(list) {
+  const copy = [...list];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[randomIndex]] = [copy[randomIndex], copy[index]];
   }
+  return copy;
+}
+
+function sleep(milliseconds) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
+function reply(repondre, message) {
+  return typeof repondre === 'function' ? repondre(message) : Promise.resolve();
+}
+
+function send(sock, jid, text, mentions = []) {
+  return sock.sendMessage(jid, { text, mentions });
+}
+
+function clearGameTimers(game) {
+  if (!game) return;
+  if (game.timeout) clearTimeout(game.timeout);
+  if (game.countdown) clearInterval(game.countdown);
+  game.timeout = null;
+  game.countdown = null;
 }
 
 function endGame(groupId) {
   const game = activeGames.get(groupId);
-  if (game && game.timer) clearTimeout(game.timer);
+  clearGameTimers(game);
   activeGames.delete(groupId);
 }
 
-function startChoiceQuiz(groupId, mode, bank, commandName) {
-  const item = randomItem(bank);
-  const game = {
-    type: 'choice-quiz',
-    mode,
-    commandName,
-    answer: clean(item.answer),
-    item,
-    startedAt: Date.now()
-  };
-  activeGames.set(groupId, game);
-  clearLater(groupId, 10 * 60 * 1000);
-  return game;
+function addScore(game, playerId) {
+  if (!playerId) return 0;
+  const score = (game.scores.get(playerId) || 0) + 1;
+  game.scores.set(playerId, score);
+  if (!groupScores.has(game.groupId)) groupScores.set(game.groupId, new Map());
+  const groupScore = groupScores.get(game.groupId);
+  groupScore.set(playerId, (groupScore.get(playerId) || 0) + 1);
+  return score;
 }
 
-function startTrueFalse(groupId) {
-  const item = randomItem(trueFalseQuiz);
-  const game = {
-    type: 'true-false',
-    answer: clean(item.answer),
-    item,
-    startedAt: Date.now()
-  };
-  activeGames.set(groupId, game);
-  clearLater(groupId, 10 * 60 * 1000);
-  return game;
+function quizAnswer(item) {
+  const key = clean(item.answer);
+  const index = ANSWER_KEYS.indexOf(key);
+  return index >= 0 ? String(index + 1) : null;
 }
 
-function showHangman(game) {
-  const masked = [...game.word]
-    .map((letter) => game.guessed.has(letter) ? letter : '＿')
-    .join(' ');
-  return `🎯 *Pendu de groupe*\n\nMot : ${masked}\nLettres essayées : ${[...game.guessed].join(', ') || 'aucune'}\nErreurs : ${game.errors}/${game.maxErrors}\n\nUtilise ".pendu lettre" ou ".pendu mot complet".`;
+function quizAnswerText(item) {
+  const answer = quizAnswer(item);
+  return answer ? `${answer}. ${item.options[ANSWER_KEYS[Number(answer) - 1]]}` : 'indisponible';
 }
 
-function startHangman(groupId) {
-  const game = {
-    type: 'hangman',
-    word: randomItem(hangmanWords),
-    guessed: new Set(),
-    errors: 0,
-    maxErrors: 7,
-    startedAt: Date.now()
-  };
-  activeGames.set(groupId, game);
-  clearLater(groupId, 10 * 60 * 1000);
-  return game;
+function formatQuizQuestion(game) {
+  const item = game.questions[game.index];
+  return `🧠 *QUIZZ ${game.label.toUpperCase()}*\n` +
+    `Question ${game.index + 1}/${game.total}\n\n` +
+    `❓ ${item.question}\n\n` +
+    `1️⃣ ${item.options.a}\n` +
+    `2️⃣ ${item.options.b}\n` +
+    `3️⃣ ${item.options.c}\n` +
+    `4️⃣ ${item.options.d}\n\n` +
+    'Réponds uniquement avec *1*, *2*, *3* ou *4*. ⏱️ *10 secondes*';
 }
 
-function scramble(word) {
-  const letters = word.split('');
-  for (let i = letters.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [letters[i], letters[j]] = [letters[j], letters[i]];
+function formatFinalScores(game) {
+  const rows = [...game.scores.entries()].sort((left, right) => right[1] - left[1]);
+  if (!rows.length) {
+    return { text: `🏁 *FIN DU QUIZZ ${game.label.toUpperCase()}*\n\nAucun point marqué.`, mentions: [] };
   }
-  const result = letters.join('');
-  return result === word && word.length > 2 ? scramble(word) : result;
+  const mentions = rows.filter(([, score]) => score > 0).map(([player]) => player);
+  const ranking = rows.map(([player, score], index) => {
+    const medal = ['🥇', '🥈', '🥉'][index] || `${index + 1}.`;
+    return `${medal} @${senderName(player)} — ${score} point${score > 1 ? 's' : ''}`;
+  }).join('\n');
+  return {
+    text: `🏁 *FIN DU QUIZZ ${game.label.toUpperCase()}*\n\n📊 *Classement final*\n${ranking}\n\n👏 Bravo à tous les participants !`,
+    mentions
+  };
 }
 
-function startAnagram(groupId) {
-  const source = randomItem(hangmanWords.filter((word) => word.length >= 5));
+function extractText(received) {
+  if (!received) return '';
+  if (typeof received === 'string') return received.trim();
+  return String(
+    received?.message?.conversation ||
+    received?.message?.extendedTextMessage?.text ||
+    received?.msg?.conversation ||
+    received?.msg?.extendedTextMessage?.text ||
+    received?.text ||
+    ''
+  ).trim();
+}
+
+function extractSender(received) {
+  if (!received || typeof received === 'string') return null;
+  return received?.key?.participant ||
+    received?.key?.remoteJid ||
+    received?.participant ||
+    received?.sender ||
+    null;
+}
+
+async function resolveSender(received, groupId, sock, getJid) {
+  const rawSender = extractSender(received);
+  if (!rawSender) return null;
+  if (typeof getJid === 'function') {
+    try {
+      const resolved = await getJid(rawSender, groupId, sock);
+      if (resolved) return resolved;
+    } catch (_) {
+      // Le JID brut reste utilisable si la résolution échoue.
+    }
+  }
+  return rawSender;
+}
+
+function sameUser(first, second) {
+  if (!first || !second) return false;
+  if (first === second) return true;
+  return String(first).split('@')[0] === String(second).split('@')[0];
+}
+
+async function receiveMessage(sock, groupId, timeout) {
+  if (typeof sock.recup_msg !== 'function') return null;
+  try {
+    return await sock.recup_msg({ ms_org: groupId, temps: timeout });
+  } catch (_) {
+    return null;
+  }
+}
+
+async function finishQuiz(groupId, sock, game) {
+  if (activeGames.get(groupId) !== game) return;
+  const result = formatFinalScores(game);
+  endGame(groupId);
+  await send(sock, groupId, result.text, result.mentions);
+}
+
+async function runQuiz(groupId, sock, game, getJid) {
+  for (game.index = 0; game.index < game.total; game.index += 1) {
+    if (activeGames.get(groupId) !== game) return;
+    await send(sock, groupId, formatQuizQuestion(game));
+    const startedAt = Date.now();
+    game.countdown = setInterval(() => {
+      const remaining = Math.ceil((10000 - (Date.now() - startedAt)) / 1000);
+      if ([5, 3, 1].includes(remaining)) send(sock, groupId, `⏳ ${remaining}s restantes`);
+    }, 1000);
+    let answered = false;
+
+    while (Date.now() - startedAt < 10000 && activeGames.get(groupId) === game) {
+      const remaining = Math.max(250, 10000 - (Date.now() - startedAt));
+      const received = await receiveMessage(sock, groupId, remaining);
+      if (!received) break;
+      const answer = clean(extractText(received));
+      const player = await resolveSender(received, groupId, sock, getJid);
+      if (!player) continue;
+      if (answer === 'stop' && sameUser(player, game.starter)) {
+        endGame(groupId);
+        await send(sock, groupId, `🛑 Quizz annulé par @${senderName(player)}.`, [player]);
+        return;
+      }
+      if (!ANSWERS.includes(answer)) continue;
+      if (answer !== quizAnswer(game.questions[game.index])) continue;
+
+      const score = addScore(game, player);
+      answered = true;
+      await send(sock, groupId, `✅ Bonne réponse, c’est bien @${senderName(player)} ! +1 point (total : ${score}).`, [player]);
+      break;
+    }
+
+    if (activeGames.get(groupId) !== game) return;
+    if (game.countdown) clearInterval(game.countdown);
+    game.countdown = null;
+    if (!answered) {
+      await send(sock, groupId, `⏰ Temps écoulé ! La bonne réponse était *${quizAnswerText(game.questions[game.index])}*.`);
+    }
+    if (game.index < game.total - 1) {
+      await send(sock, groupId, '➡️ Prochaine question dans 2 secondes.');
+      await sleep(2000);
+    }
+  }
+  await finishQuiz(groupId, sock, game);
+}
+
+function setupPrompt(label) {
+  return `🎯 *QUIZZ ${label.toUpperCase()}*\n\nChoisis le nombre de questions :\n1️⃣ 10 questions\n2️⃣ 20 questions\n3️⃣ 30 questions\n\nRéponds avec *1*, *2* ou *3*. Seule la personne qui a lancé le quizz peut choisir.`;
+}
+
+async function startQuiz(groupId, sock, definition, total, starter, getJid) {
+  const questions = shuffle(definition.bank).slice(0, Math.min(total, definition.bank.length));
   const game = {
-    type: 'anagram',
-    word: source,
-    scrambled: scramble(source),
-    startedAt: Date.now()
+    type: 'quiz',
+    groupId,
+    mode: definition.mode,
+    label: definition.label,
+    questions,
+    total: questions.length,
+    index: 0,
+    starter,
+    scores: new Map(),
+    timeout: null
   };
   activeGames.set(groupId, game);
-  clearLater(groupId, 7 * 60 * 1000);
-  return game;
+  await send(sock, groupId, `✅ *QUIZZ ${definition.label.toUpperCase()} LANCÉ !*\n${game.total} questions. Tout le groupe peut répondre.\nUne seule bonne réponse par question rapporte 1 point.`);
+  await runQuiz(groupId, sock, game, getJid);
+}
+
+async function chooseQuizLength(groupId, sock, setup, definition, getJid) {
+  const startedAt = Date.now();
+  while (activeGames.get(groupId) === setup && Date.now() - startedAt < 60000) {
+    const received = await receiveMessage(sock, groupId, Math.max(250, 60000 - (Date.now() - startedAt)));
+    if (!received) break;
+    const player = await resolveSender(received, groupId, sock, getJid);
+    if (!player) continue;
+    if (!sameUser(player, setup.starter)) {
+      await send(sock, groupId, `⏳ Seul @${senderName(setup.starter)} peut choisir le nombre de questions.`, [setup.starter]);
+      continue;
+    }
+    const selection = QUIZ_LENGTHS[clean(extractText(received))];
+    if (!selection) {
+      await send(sock, groupId, '❌ Choix invalide. Réponds uniquement avec 1, 2 ou 3.');
+      continue;
+    }
+    await startQuiz(groupId, sock, { ...definition, mode: setup.mode }, selection, setup.starter, getJid);
+    return;
+  }
+  if (activeGames.get(groupId) === setup) {
+    endGame(groupId);
+    await send(sock, groupId, '⌛ Choix non reçu. Le quizz est annulé.');
+  }
+}
+
+async function handleQuizCommand({ jid, sock, repondre, auteur_Message, getJid }, definition) {
+  if (!isGroup(jid)) {
+    await reply(repondre, '❌ Les quizz sont disponibles uniquement dans les groupes.');
+    return;
+  }
+  if (typeof sock.recup_msg !== 'function') {
+    await reply(repondre, '❌ Le module de récupération des messages est indisponible sur ce déploiement.');
+    return;
+  }
+  const current = activeGames.get(jid);
+  if (current) {
+    await reply(repondre, '⚠️ Un autre jeu ou quizz est déjà en cours dans ce groupe.');
+    return;
+  }
+  const setup = {
+    type: 'quiz-setup',
+    groupId: jid,
+    mode: definition.mode,
+    label: definition.label,
+    starter: auteur_Message
+  };
+  activeGames.set(jid, setup);
+  await reply(repondre, setupPrompt(definition.label));
+  await chooseQuizLength(jid, sock, setup, definition, getJid);
 }
 
 function requireGroup(jid, repondre) {
   if (isGroup(jid)) return true;
-  reply(repondre, '❌ Ce jeu est réservé aux groupes WhatsApp.');
+  reply(repondre, '❌ Cette commande est réservée aux groupes WhatsApp.');
   return false;
+}
+
+for (const [commandName, mode, label, bank, aliases] of [
+  ['quizz-anime', 'anime', 'Anime', quizDefinitions.anime.bank, ['quizanimeplus', 'quizanime']],
+  ['quizz-gaming', 'gaming', 'Gaming', quizDefinitions.gaming.bank, ['quizgaming', 'gamingquiz']],
+  ['quizz-cultire-g', 'culture', 'Culture générale', quizDefinitions.culture.bank, ['quizz-culture-g', 'quizculture', 'quizz-culture', 'culturequiz']],
+  ['quizz-foot', 'football', 'Football', quizDefinitions.football.bank, ['quizfoot', 'quizz-football', 'footballquiz']]
+]) {
+  ovlcmd({
+    nom_cmd: commandName,
+    alias: aliases,
+    classe: 'Jeux',
+    react: '🧠',
+    desc: `Lance le quizz ${label} avec 10, 20 ou 30 questions.`
+  }, async (jid, sock, context) => {
+    await handleQuizCommand({ jid, sock, ...context }, { mode, label, bank });
+  });
 }
 
 ovlcmd({
@@ -190,82 +337,19 @@ ovlcmd({
   alias: ['games', 'multijeux'],
   classe: 'Jeux',
   react: '🎮',
-  desc: 'Affiche les jeux et quiz de groupe disponibles.'
+  desc: 'Affiche les jeux et quizz de groupe disponibles.'
 }, async (jid, sock, { repondre }) => {
   await reply(repondre,
-    '🎮 *Jeux de groupe disponibles*\n\n' +
+    '🎮 *Jeux et quizz de groupe*\n\n' +
+    '• `.quizz-anime` — 10, 20 ou 30 questions anime\n' +
+    '• `.quizz-gaming` — quiz jeux vidéo\n' +
+    '• `.quizz-cultire-g` — culture générale\n' +
+    '• `.quizz-foot` — quiz football\n' +
     '• `.pendu` — pendu collaboratif\n' +
     '• `.anagramme` — mot mélangé à deviner\n' +
-    '• `.quizanimeplus` — quiz anime enrichi\n' +
-    '• `.quizculture` — culture générale\n' +
-    '• `.quizfoot` — quiz football\n' +
-    '• `.quizgaming` — quiz jeux vidéo\n' +
-    '• `.vraioufaux` — vrai ou faux anime\n' +
-    '• `.scorejeux` — classement du groupe\n' +
-    '• `.stopjeu` — arrêter la partie en cours\n\n' +
-    'Pour répondre à une question, relance la même commande avec ta réponse.');
-});
-
-for (const [commandName, mode, bank] of [
-  ['quizanimeplus', 'anime', animePool],
-  ['quizculture', 'culture', extraQuiz.culture],
-  ['quizfoot', 'football', extraQuiz.football],
-  ['quizgaming', 'gaming', extraQuiz.gaming]
-]) {
-  ovlcmd({
-    nom_cmd: commandName,
-    classe: 'Jeux',
-    react: '🧠',
-    desc: `Lance un quiz ${mode} jouable à plusieurs dans un groupe.`
-  }, async (jid, sock, { repondre, auteur_Message, arg }) => {
-    if (!requireGroup(jid, repondre)) return;
-    const answer = clean(textArg(arg));
-    const current = activeGames.get(jid);
-    if (!answer || !current || current.type !== 'choice-quiz' || current.mode !== mode) {
-      if (current && current.type !== 'choice-quiz') {
-        await reply(repondre, '⚠️ Une autre partie est déjà en cours. Utilise `.stopjeu` ou termine-la d’abord.');
-        return;
-      }
-      const game = startChoiceQuiz(jid, mode, bank, commandName);
-      await reply(repondre, `🎲 *Quiz ${mode}*\n\n${formatMultipleChoice(game.item)}`);
-      return;
-    }
-    if (answer === current.answer) {
-      const points = addPoint(jid, auteur_Message);
-      endGame(jid);
-      await reply(repondre, `✅ Bonne réponse, @${senderName(auteur_Message)} ! Tu gagnes 1 point et tu totalises ${points}.\n\nRelance ".${commandName}" pour la prochaine question.`);
-    } else {
-      await reply(repondre, '❌ Mauvaise réponse. La partie continue : essaie encore avec a, b, c ou d.');
-    }
-  });
-}
-
-ovlcmd({
-  nom_cmd: 'vraioufaux',
-  alias: ['vof', 'quizvf'],
-  classe: 'Jeux',
-  react: '⚖️',
-  desc: 'Lance un quiz vrai ou faux anime dans un groupe.'
-}, async (jid, sock, { repondre, auteur_Message, arg }) => {
-  if (!requireGroup(jid, repondre)) return;
-  const answer = clean(textArg(arg));
-  const current = activeGames.get(jid);
-  if (!answer || !current || current.type !== 'true-false') {
-    if (current && current.type !== 'true-false') {
-      await reply(repondre, '⚠️ Une autre partie est déjà en cours. Utilise `.stopjeu` ou termine-la d’abord.');
-      return;
-    }
-    const game = startTrueFalse(jid);
-    await reply(repondre, `⚖️ *Vrai ou faux*\n\n${game.item.question}\n\nRéponds avec ".vraioufaux vrai" ou ".vraioufaux faux".`);
-    return;
-  }
-  if (answer === current.answer) {
-    const points = addPoint(jid, auteur_Message);
-    endGame(jid);
-    await reply(repondre, `✅ Exact, @${senderName(auteur_Message)} ! +1 point, total : ${points}.\n\nRelance ".vraioufaux" pour continuer.`);
-  } else {
-    await reply(repondre, '❌ Raté. La partie continue : réponds encore vrai ou faux.');
-  }
+    '• `.scorejeux` — scores du groupe\n' +
+    '• `.stopjeu` — arrêter la partie active\n\n' +
+    'Après le lancement, le créateur choisit 1, 2 ou 3. Ensuite, tout le groupe répond avec 1, 2, 3 ou 4.');
 });
 
 ovlcmd({
@@ -283,38 +367,53 @@ ovlcmd({
       await reply(repondre, '⚠️ Une autre partie est déjà en cours. Utilise `.stopjeu` ou termine-la d’abord.');
       return;
     }
-    game = startHangman(jid);
-    await reply(repondre, `${showHangman(game)}\n\n🎉 @${senderName(auteur_Message)} lance la partie !`);
+    game = {
+      type: 'hangman', groupId: jid, word: randomItem(hangmanWords), guessed: new Set(), errors: 0, maxErrors: 7,
+      timeout: setTimeout(() => endGame(jid), 10 * 60 * 1000), scores: groupScores.get(jid) || new Map()
+    };
+    activeGames.set(jid, game);
+    await reply(repondre, `🎯 *Pendu de groupe*\n\nMot : ${[...game.word].map(() => '＿').join(' ')}\n\nUtilise ".pendu lettre" ou ".pendu mot complet".`);
     return;
   }
   if (guess.length === 1) {
-    if (game.guessed.has(guess.toUpperCase())) {
+    const letter = guess.toUpperCase();
+    if (game.guessed.has(letter)) {
       await reply(repondre, 'Cette lettre a déjà été essayée.');
       return;
     }
-    const letter = guess.toUpperCase();
     game.guessed.add(letter);
     if (!game.word.includes(letter)) game.errors += 1;
   } else if (guess.toUpperCase() === game.word) {
-    const points = addPoint(jid, auteur_Message);
+    const score = addScore(game, auteur_Message);
     endGame(jid);
-    await reply(repondre, `🏆 @${senderName(auteur_Message)} a trouvé le mot *${game.word}* ! +1 point, total : ${points}.`);
+    await reply(repondre, `🏆 @${senderName(auteur_Message)} a trouvé *${game.word}* ! +1 point (total : ${score}).`);
     return;
   } else {
     game.errors += 1;
   }
+  const masked = [...game.word].map((letter) => game.guessed.has(letter) ? letter : '＿').join(' ');
   const won = [...game.word].every((letter) => game.guessed.has(letter));
   if (won) {
-    const points = addPoint(jid, auteur_Message);
+    const score = addScore(game, auteur_Message);
     endGame(jid);
-    await reply(repondre, `🏆 Le groupe a trouvé *${game.word}* ! @${senderName(auteur_Message)} reçoit 1 point, total : ${points}.`);
+    await reply(repondre, `🏆 Le groupe a trouvé *${game.word}* ! @${senderName(auteur_Message)} reçoit 1 point (total : ${score}).`);
   } else if (game.errors >= game.maxErrors) {
     endGame(jid);
     await reply(repondre, `💥 Partie terminée ! Le mot était *${game.word}*.`);
   } else {
-    await reply(repondre, showHangman(game));
+    await reply(repondre, `🎯 Mot : ${masked}\nLettres essayées : ${[...game.guessed].join(', ') || 'aucune'}\nErreurs : ${game.errors}/${game.maxErrors}`);
   }
 });
+
+function scramble(word) {
+  const letters = word.split('');
+  for (let index = letters.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [letters[index], letters[randomIndex]] = [letters[randomIndex], letters[index]];
+  }
+  const result = letters.join('');
+  return result === word && word.length > 2 ? scramble(word) : result;
+}
 
 ovlcmd({
   nom_cmd: 'anagramme',
@@ -331,14 +430,20 @@ ovlcmd({
       await reply(repondre, '⚠️ Une autre partie est déjà en cours. Utilise `.stopjeu` ou termine-la d’abord.');
       return;
     }
-    game = startAnagram(jid);
-    await reply(repondre, `🔀 *Anagramme*\n\nLettres mélangées : *${game.scrambled}*\n\nRéponds avec ".anagramme mot". Bonne chance !`);
+    game = {
+      type: 'anagram', groupId: jid, word: randomItem(hangmanWords.filter((word) => word.length >= 5)), timeout: null,
+      scores: groupScores.get(jid) || new Map()
+    };
+    game.scrambled = scramble(game.word);
+    game.timeout = setTimeout(() => endGame(jid), 7 * 60 * 1000);
+    activeGames.set(jid, game);
+    await reply(repondre, `🔀 *Anagramme*\n\nLettres mélangées : *${game.scrambled}*\n\nRéponds avec ".anagramme mot".`);
     return;
   }
   if (guess === clean(game.word)) {
-    const points = addPoint(jid, auteur_Message);
+    const score = addScore(game, auteur_Message);
     endGame(jid);
-    await reply(repondre, `✅ Bravo @${senderName(auteur_Message)} ! Le mot était *${game.word}*. +1 point, total : ${points}.`);
+    await reply(repondre, `✅ Bravo @${senderName(auteur_Message)} ! Le mot était *${game.word}*. +1 point (total : ${score}).`);
   } else {
     await reply(repondre, '❌ Ce n’est pas le bon mot. Les autres joueurs peuvent encore essayer.');
   }
@@ -352,7 +457,16 @@ ovlcmd({
   desc: 'Affiche le classement des jeux du groupe.'
 }, async (jid, sock, { repondre }) => {
   if (!requireGroup(jid, repondre)) return;
-  await reply(repondre, `🏆 *Classement du groupe*\n\n${scoreboard(jid)}`);
+  const scores = groupScores.get(jid);
+  if (!scores || !scores.size) {
+    await reply(repondre, '🏆 Aucun point pour le moment.');
+    return;
+  }
+  const ranking = [...scores.entries()]
+    .sort((left, right) => right[1] - left[1])
+    .map(([player, score], index) => `${index + 1}. @${senderName(player)} — ${score} point${score > 1 ? 's' : ''}`)
+    .join('\n');
+  await send(sock, jid, `🏆 *Classement des jeux*\n\n${ranking}`, [...scores.keys()]);
 });
 
 ovlcmd({

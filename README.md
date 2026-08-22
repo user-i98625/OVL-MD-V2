@@ -240,7 +240,7 @@ NOM_BOT=🤖 OVL-MD BOT V2
 
 ### 🎮 Jeux et quiz de groupe
 
-Le bot inclut désormais des jeux jouables à plusieurs dans un groupe : `.pendu`, `.anagramme`, `.quizanimeplus`, `.quizculture`, `.quizfoot`, `.quizgaming` et `.vraioufaux`. Utilise `.jeux` pour afficher l’aide, relance la commande du jeu pour proposer une réponse, `.scorejeux` pour consulter le classement et `.stopjeu` pour arrêter une partie. Les parties et les scores sont conservés en mémoire et sont réinitialisés lors d’un redémarrage du bot.
+Le bot inclut désormais des jeux jouables à plusieurs dans un groupe : `.pendu` et `.anagramme`. Les quizz se lancent avec `.quizz-anime`, `.quizz-gaming`, `.quizz-cultire-g` ou `.quizz-foot` ; `.quizz-culture-g` et les anciens noms restent également acceptés comme alias. Après le lancement, la personne qui a lancé le quizz choisit 1, 2 ou 3 pour jouer respectivement 10, 20 ou 30 questions. Tout le groupe répond ensuite uniquement avec 1, 2, 3 ou 4. Chaque question reste ouverte 10 secondes, la bonne réponse est révélée brièvement et la suivante arrive après 2 secondes. Utilise `.jeux` pour afficher l’aide, `.scorejeux` pour consulter le classement et `.stopjeu` pour arrêter une partie. Les parties et les scores sont conservés en mémoire et sont réinitialisés lors d’un redémarrage du bot.
 
 ### 🌍 Rejoins la Communauté OVL
 

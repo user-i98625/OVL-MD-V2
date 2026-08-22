@@ -1,53 +1,908 @@
 {
   "culture": [
-    {"question":"Quelle est la capitale du Canada ?","options":{"a":"Toronto","b":"Vancouver","c":"Ottawa","d":"Montréal"},"answer":"c"},
-    {"question":"Combien de côtés possède un hexagone ?","options":{"a":"5","b":"6","c":"7","d":"8"},"answer":"b"},
-    {"question":"Quel océan est le plus vaste ?","options":{"a":"Atlantique","b":"Indien","c":"Arctique","d":"Pacifique"},"answer":"d"},
-    {"question":"Qui a peint la Joconde ?","options":{"a":"Michel-Ange","b":"Léonard de Vinci","c":"Raphaël","d":"Van Gogh"},"answer":"b"},
-    {"question":"Quel est le symbole chimique de l’or ?","options":{"a":"Ag","b":"Or","c":"Au","d":"Fe"},"answer":"c"},
-    {"question":"Quelle planète est surnommée la planète rouge ?","options":{"a":"Vénus","b":"Mars","c":"Jupiter","d":"Mercure"},"answer":"b"},
-    {"question":"Combien de joueurs une équipe de football aligne-t-elle sur le terrain au début d’un match ?","options":{"a":"9","b":"10","c":"11","d":"12"},"answer":"c"},
-    {"question":"Quel pays a pour capitale Lisbonne ?","options":{"a":"Espagne","b":"Portugal","c":"Italie","d":"Brésil"},"answer":"b"},
-    {"question":"Quel instrument possède généralement 88 touches ?","options":{"a":"Piano","b":"Accordéon","c":"Orgue","d":"Xylophone"},"answer":"a"},
-    {"question":"Quelle langue compte le plus de locuteurs natifs dans le monde ?","options":{"a":"Anglais","b":"Espagnol","c":"Mandarin","d":"Arabe"},"answer":"c"},
-    {"question":"Quel gaz les plantes absorbent-elles principalement pour la photosynthèse ?","options":{"a":"Oxygène","b":"Azote","c":"Hydrogène","d":"Dioxyde de carbone"},"answer":"d"},
-    {"question":"Quel est le plus grand mammifère vivant ?","options":{"a":"Éléphant d’Afrique","b":"Baleine bleue","c":"Requin-baleine","d":"Girafe"},"answer":"b"},
-    {"question":"Dans quel pays se trouve la ville de Marrakech ?","options":{"a":"Maroc","b":"Algérie","c":"Tunisie","d":"Égypte"},"answer":"a"},
-    {"question":"Combien de minutes y a-t-il dans deux heures ?","options":{"a":"100","b":"120","c":"140","d":"180"},"answer":"b"},
-    {"question":"Quel métal est liquide à température ambiante ?","options":{"a":"Cuivre","b":"Mercure","c":"Aluminium","d":"Zinc"},"answer":"b"}
+    {
+      "question": "Quelle est la capitale du Canada ?",
+      "options": {
+        "a": "Toronto",
+        "b": "Vancouver",
+        "c": "Ottawa",
+        "d": "Montréal"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Combien de côtés possède un hexagone ?",
+      "options": {
+        "a": "5",
+        "b": "6",
+        "c": "7",
+        "d": "8"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel océan est le plus vaste ?",
+      "options": {
+        "a": "Atlantique",
+        "b": "Indien",
+        "c": "Arctique",
+        "d": "Pacifique"
+      },
+      "answer": "d"
+    },
+    {
+      "question": "Qui a peint la Joconde ?",
+      "options": {
+        "a": "Michel-Ange",
+        "b": "Léonard de Vinci",
+        "c": "Raphaël",
+        "d": "Van Gogh"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel est le symbole chimique de l’or ?",
+      "options": {
+        "a": "Ag",
+        "b": "Or",
+        "c": "Au",
+        "d": "Fe"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Quelle planète est surnommée la planète rouge ?",
+      "options": {
+        "a": "Vénus",
+        "b": "Mars",
+        "c": "Jupiter",
+        "d": "Mercure"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Combien de joueurs une équipe de football aligne-t-elle sur le terrain au début d’un match ?",
+      "options": {
+        "a": "9",
+        "b": "10",
+        "c": "11",
+        "d": "12"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Quel pays a pour capitale Lisbonne ?",
+      "options": {
+        "a": "Espagne",
+        "b": "Portugal",
+        "c": "Italie",
+        "d": "Brésil"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel instrument possède généralement 88 touches ?",
+      "options": {
+        "a": "Piano",
+        "b": "Accordéon",
+        "c": "Orgue",
+        "d": "Xylophone"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Quelle langue compte le plus de locuteurs natifs dans le monde ?",
+      "options": {
+        "a": "Anglais",
+        "b": "Espagnol",
+        "c": "Mandarin",
+        "d": "Arabe"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Quel gaz les plantes absorbent-elles principalement pour la photosynthèse ?",
+      "options": {
+        "a": "Oxygène",
+        "b": "Azote",
+        "c": "Hydrogène",
+        "d": "Dioxyde de carbone"
+      },
+      "answer": "d"
+    },
+    {
+      "question": "Quel est le plus grand mammifère vivant ?",
+      "options": {
+        "a": "Éléphant d’Afrique",
+        "b": "Baleine bleue",
+        "c": "Requin-baleine",
+        "d": "Girafe"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Dans quel pays se trouve la ville de Marrakech ?",
+      "options": {
+        "a": "Maroc",
+        "b": "Algérie",
+        "c": "Tunisie",
+        "d": "Égypte"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Combien de minutes y a-t-il dans deux heures ?",
+      "options": {
+        "a": "100",
+        "b": "120",
+        "c": "140",
+        "d": "180"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel métal est liquide à température ambiante ?",
+      "options": {
+        "a": "Cuivre",
+        "b": "Mercure",
+        "c": "Aluminium",
+        "d": "Zinc"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quelle est la capitale du Japon ?",
+      "options": {
+        "a": "Kyoto",
+        "b": "Tokyo",
+        "c": "Osaka",
+        "d": "Hiroshima"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel est le plus grand continent ?",
+      "options": {
+        "a": "Afrique",
+        "b": "Europe",
+        "c": "Asie",
+        "d": "Amérique du Sud"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "À quelle température l’eau bout-elle au niveau de la mer ?",
+      "options": {
+        "a": "50 °C",
+        "b": "80 °C",
+        "c": "100 °C",
+        "d": "120 °C"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Qui a écrit Les Misérables ?",
+      "options": {
+        "a": "Victor Hugo",
+        "b": "Émile Zola",
+        "c": "Molière",
+        "d": "Albert Camus"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Qui fut le premier homme à marcher sur la Lune ?",
+      "options": {
+        "a": "Youri Gagarine",
+        "b": "Neil Armstrong",
+        "c": "Buzz Aldrin",
+        "d": "John Glenn"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quelle est la monnaie officielle du Japon ?",
+      "options": {
+        "a": "Won",
+        "b": "Yuan",
+        "c": "Yen",
+        "d": "Ringgit"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Quelle est la racine carrée de 81 ?",
+      "options": {
+        "a": "7",
+        "b": "8",
+        "c": "9",
+        "d": "10"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Dans quel continent se trouve principalement le désert du Sahara ?",
+      "options": {
+        "a": "Asie",
+        "b": "Afrique",
+        "c": "Océanie",
+        "d": "Europe"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quelle molécule contient l’information génétique ?",
+      "options": {
+        "a": "ADN",
+        "b": "ATP",
+        "c": "CO2",
+        "d": "H2O"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Qui a peint La Nuit étoilée ?",
+      "options": {
+        "a": "Claude Monet",
+        "b": "Pablo Picasso",
+        "c": "Vincent van Gogh",
+        "d": "Salvador Dalí"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Quelle est la langue officielle du Brésil ?",
+      "options": {
+        "a": "Espagnol",
+        "b": "Portugais",
+        "c": "Français",
+        "d": "Italien"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Combien de côtés possède un décagone ?",
+      "options": {
+        "a": "8",
+        "b": "9",
+        "c": "10",
+        "d": "12"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Combien d’os possède approximativement un adulte ?",
+      "options": {
+        "a": "106",
+        "b": "206",
+        "c": "306",
+        "d": "406"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quelle est la plus grande planète du système solaire ?",
+      "options": {
+        "a": "Saturne",
+        "b": "Jupiter",
+        "c": "Neptune",
+        "d": "Uranus"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel fleuve est souvent présenté comme le plus long du monde ?",
+      "options": {
+        "a": "Nil",
+        "b": "Danube",
+        "c": "Mississippi",
+        "d": "Gange"
+      },
+      "answer": "a"
+    }
   ],
   "football": [
-    {"question":"Combien de temps dure normalement un match de football sans prolongation ?","options":{"a":"60 minutes","b":"80 minutes","c":"90 minutes","d":"120 minutes"},"answer":"c"},
-    {"question":"Quel carton entraîne généralement l’exclusion d’un joueur ?","options":{"a":"Bleu","b":"Jaune","c":"Rouge","d":"Vert"},"answer":"c"},
-    {"question":"Comment appelle-t-on trois buts marqués par le même joueur dans un match ?","options":{"a":"Triplé","b":"Doublé","c":"Hat-trick défensif","d":"Grand chelem"},"answer":"a"},
-    {"question":"Quelle partie du corps est interdite aux joueurs de champ pour contrôler le ballon ?","options":{"a":"Le pied","b":"La tête","c":"La poitrine","d":"La main volontairement"},"answer":"d"},
-    {"question":"Combien de joueurs composent une équipe sur le terrain en futsal ?","options":{"a":"4","b":"5","c":"6","d":"7"},"answer":"b"},
-    {"question":"Que récompense un penalty ?","options":{"a":"Une faute dans la surface","b":"Un hors-jeu","c":"Une touche longue","d":"Un corner"},"answer":"a"},
-    {"question":"Comment s’appelle la reprise de jeu lorsque le ballon sort par la ligne de touche ?","options":{"a":"Coup de pied de but","b":"Touche","c":"Coup franc direct","d":"Engagement"},"answer":"b"},
-    {"question":"Quel poste porte habituellement des gants et peut prendre le ballon à la main dans sa surface ?","options":{"a":"Libéro","b":"Ailier","c":"Gardien","d":"Milieu"},"answer":"c"},
-    {"question":"Combien de points rapporte habituellement une victoire en championnat ?","options":{"a":"1","b":"2","c":"3","d":"4"},"answer":"c"},
-    {"question":"Quel terme désigne une passe décisive menant directement à un but ?","options":{"a":"Assist","b":"Bloc","c":"Pressing","d":"Relance"},"answer":"a"},
-    {"question":"Quelle est la largeur approximative d’un but de football ?","options":{"a":"5,32 m","b":"7,32 m","c":"9,32 m","d":"11,32 m"},"answer":"b"},
-    {"question":"Quel geste est sifflé lorsqu’un joueur se trouve devant l’avant-dernier adversaire au départ de la passe, dans une position active ?","options":{"a":"Corner","b":"Hors-jeu","c":"Main","d":"Six mètres"},"answer":"b"},
-    {"question":"Comment appelle-t-on le championnat européen entre sélections nationales ?","options":{"a":"La Copa","b":"L’Euro","c":"La Ligue des nations uniquement","d":"La Supercoupe"},"answer":"b"},
-    {"question":"Quel est le rôle principal d’un arbitre assistant le long de la touche ?","options":{"a":"Remplacer le gardien","b":"Signaler notamment les hors-jeu et sorties","c":"Choisir les remplaçants","d":"Chronométrer les entraînements"},"answer":"b"},
-    {"question":"Comment appelle-t-on une rencontre entre deux équipes rivales de la même ville ou région ?","options":{"a":"Un derby","b":"Un barrage","c":"Un tournoi","d":"Une remontada"},"answer":"a"}
+    {
+      "question": "Combien de temps dure normalement un match de football sans prolongation ?",
+      "options": {
+        "a": "60 minutes",
+        "b": "80 minutes",
+        "c": "90 minutes",
+        "d": "120 minutes"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Quel carton entraîne généralement l’exclusion d’un joueur ?",
+      "options": {
+        "a": "Bleu",
+        "b": "Jaune",
+        "c": "Rouge",
+        "d": "Vert"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Comment appelle-t-on trois buts marqués par le même joueur dans un match ?",
+      "options": {
+        "a": "Triplé",
+        "b": "Doublé",
+        "c": "Hat-trick défensif",
+        "d": "Grand chelem"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Quelle partie du corps est interdite aux joueurs de champ pour contrôler le ballon ?",
+      "options": {
+        "a": "Le pied",
+        "b": "La tête",
+        "c": "La poitrine",
+        "d": "La main volontairement"
+      },
+      "answer": "d"
+    },
+    {
+      "question": "Combien de joueurs composent une équipe sur le terrain en futsal ?",
+      "options": {
+        "a": "4",
+        "b": "5",
+        "c": "6",
+        "d": "7"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Que récompense un penalty ?",
+      "options": {
+        "a": "Une faute dans la surface",
+        "b": "Un hors-jeu",
+        "c": "Une touche longue",
+        "d": "Un corner"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Comment s’appelle la reprise de jeu lorsque le ballon sort par la ligne de touche ?",
+      "options": {
+        "a": "Coup de pied de but",
+        "b": "Touche",
+        "c": "Coup franc direct",
+        "d": "Engagement"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel poste porte habituellement des gants et peut prendre le ballon à la main dans sa surface ?",
+      "options": {
+        "a": "Libéro",
+        "b": "Ailier",
+        "c": "Gardien",
+        "d": "Milieu"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Combien de points rapporte habituellement une victoire en championnat ?",
+      "options": {
+        "a": "1",
+        "b": "2",
+        "c": "3",
+        "d": "4"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Quel terme désigne une passe décisive menant directement à un but ?",
+      "options": {
+        "a": "Assist",
+        "b": "Bloc",
+        "c": "Pressing",
+        "d": "Relance"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Quelle est la largeur approximative d’un but de football ?",
+      "options": {
+        "a": "5,32 m",
+        "b": "7,32 m",
+        "c": "9,32 m",
+        "d": "11,32 m"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel geste est sifflé lorsqu’un joueur se trouve devant l’avant-dernier adversaire au départ de la passe, dans une position active ?",
+      "options": {
+        "a": "Corner",
+        "b": "Hors-jeu",
+        "c": "Main",
+        "d": "Six mètres"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Comment appelle-t-on le championnat européen entre sélections nationales ?",
+      "options": {
+        "a": "La Copa",
+        "b": "L’Euro",
+        "c": "La Ligue des nations uniquement",
+        "d": "La Supercoupe"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel est le rôle principal d’un arbitre assistant le long de la touche ?",
+      "options": {
+        "a": "Remplacer le gardien",
+        "b": "Signaler notamment les hors-jeu et sorties",
+        "c": "Choisir les remplaçants",
+        "d": "Chronométrer les entraînements"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Comment appelle-t-on une rencontre entre deux équipes rivales de la même ville ou région ?",
+      "options": {
+        "a": "Un derby",
+        "b": "Un barrage",
+        "c": "Un tournoi",
+        "d": "Une remontada"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Quelle règle sanctionne une position irrégulière au départ d’une passe ?",
+      "options": {
+        "a": "Le hors-jeu",
+        "b": "La touche",
+        "c": "Le corner",
+        "d": "Le dégagement"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "À quelle fréquence la Coupe du monde est-elle normalement organisée ?",
+      "options": {
+        "a": "Tous les ans",
+        "b": "Tous les deux ans",
+        "c": "Tous les quatre ans",
+        "d": "Tous les cinq ans"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Combien de joueurs sont présents sur le terrain au total au début d’un match classique ?",
+      "options": {
+        "a": "18",
+        "b": "20",
+        "c": "22",
+        "d": "24"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Quel pays a remporté la Coupe du monde 1998 ?",
+      "options": {
+        "a": "Brésil",
+        "b": "France",
+        "c": "Allemagne",
+        "d": "Italie"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quelle compétition européenne oppose principalement les meilleurs clubs ?",
+      "options": {
+        "a": "Ligue des champions",
+        "b": "Euro",
+        "c": "Coupe du monde",
+        "d": "Copa América"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Comment départage-t-on souvent deux équipes après une égalité en phase à élimination directe ?",
+      "options": {
+        "a": "Par un tirage au sort immédiat",
+        "b": "Par une séance de tirs au but",
+        "c": "Par une touche",
+        "d": "Par un corner automatique"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quelle est la durée habituelle de la mi-temps ?",
+      "options": {
+        "a": "5 minutes",
+        "b": "10 minutes",
+        "c": "15 minutes",
+        "d": "30 minutes"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Quelle reprise est accordée quand le ballon sort par la ligne de touche ?",
+      "options": {
+        "a": "Une touche",
+        "b": "Un penalty",
+        "c": "Un coup de pied de but",
+        "d": "Un engagement"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Deux cartons jaunes dans le même match entraînent généralement :",
+      "options": {
+        "a": "Un but automatique",
+        "b": "Une expulsion",
+        "c": "Un remplacement obligatoire",
+        "d": "Un corner"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Comment appelle-t-on un but marqué de la tête ?",
+      "options": {
+        "a": "Une volée",
+        "b": "Une tête",
+        "c": "Un crochet",
+        "d": "Un tacle"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel coup est accordé après une faute ?",
+      "options": {
+        "a": "Un coup franc",
+        "b": "Une balle à terre uniquement",
+        "c": "Une sortie de but",
+        "d": "Une remise au gardien"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Que signifie l’acronyme VAR dans le football ?",
+      "options": {
+        "a": "Video Assistant Referee",
+        "b": "Virtual Attack Rotation",
+        "c": "Very Accurate Replay",
+        "d": "Verified Athlete Rule"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Quel accessoire distingue généralement le capitaine ?",
+      "options": {
+        "a": "Une casquette",
+        "b": "Un brassard",
+        "c": "Une cape",
+        "d": "Un sifflet"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quelle partie entoure le terrain et retient le ballon derrière le but ?",
+      "options": {
+        "a": "Le filet",
+        "b": "La ligne médiane",
+        "c": "La tribune",
+        "d": "Le rond central"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Comment appelle-t-on une passe qui traverse la défense vers un partenaire ?",
+      "options": {
+        "a": "Passe en profondeur",
+        "b": "Passe de sortie",
+        "c": "Passe neutre",
+        "d": "Passe morte"
+      },
+      "answer": "a"
+    }
   ],
   "gaming": [
-    {"question":"Dans Minecraft, quel matériau est nécessaire pour fabriquer une table d’enchantement ?","options":{"a":"Diamant","b":"Bois uniquement","c":"Émeraude","d":"Quartz uniquement"},"answer":"a"},
-    {"question":"Dans Mario, quel objet donne généralement une vie supplémentaire ?","options":{"a":"Pièce rouge","b":"Champignon vert","c":"Étoile","d":"Fleur de feu"},"answer":"b"},
-    {"question":"Dans The Legend of Zelda, comment s’appelle le héros principal ?","options":{"a":"Zelda","b":"Link","c":"Ganon","d":"Epona"},"answer":"b"},
-    {"question":"Dans Pokémon, quel type possède Pikachu ?","options":{"a":"Feu","b":"Électrik","c":"Eau","d":"Normal"},"answer":"b"},
-    {"question":"Dans Among Us, quel rôle sabote le vaisseau ?","options":{"a":"Le Crewmate","b":"L’Imposteur","c":"Le Gardien","d":"Le Spectateur"},"answer":"b"},
-    {"question":"Dans Fortnite, quel est l’objectif principal du mode Battle Royale ?","options":{"a":"Être le dernier survivant","b":"Construire la plus haute tour","c":"Capturer trois drapeaux","d":"Finir une course"},"answer":"a"},
-    {"question":"Dans Super Smash Bros., quel personnage est un plombier moustachu ?","options":{"a":"Kirby","b":"Mario","c":"Fox","d":"Ness"},"answer":"b"},
-    {"question":"Dans League of Legends, comment appelle-t-on la carte principale classique ?","options":{"a":"Summoner’s Rift","b":"Nexus Arena","c":"Runeterra Field","d":"Blue Rift"},"answer":"a"},
-    {"question":"Dans God of War, comment s’appelle le fils de Kratos ?","options":{"a":"Atreus","b":"Baldur","c":"Mimir","d":"Brokk"},"answer":"a"},
-    {"question":"Dans GTA, que signifie l’abréviation GTA ?","options":{"a":"Grand Theft Auto","b":"Global Tactical Action","c":"Great Town Adventure","d":"Grand Team Arena"},"answer":"a"},
-    {"question":"Dans Valorant, quel type de jeu est proposé principalement ?","options":{"a":"FPS tactique","b":"Jeu de course","c":"RPG au tour par tour","d":"Simulation agricole"},"answer":"a"},
-    {"question":"Dans Clash Royale, que faut-il principalement détruire pour gagner une partie ?","options":{"a":"Les tours adverses","b":"Les ressources de la carte","c":"Le chronomètre","d":"Les cartes du joueur"},"answer":"a"},
-    {"question":"Dans Elden Ring, comment appelle-t-on la monture du joueur ?","options":{"a":"Torrent","b":"Shadowmere","c":"Roach","d":"Agro"},"answer":"a"},
-    {"question":"Dans Tetris, quelle forme est composée de quatre carrés alignés ?","options":{"a":"T","b":"L","c":"I","d":"S"},"answer":"c"},
-    {"question":"Dans Animal Crossing, quel animal dirige les services aux résidents sur l’île ?","options":{"a":"Tom Nook","b":"Kéké","c":"Marie","d":"Rounard"},"answer":"c"}
+    {
+      "question": "Dans Minecraft, quel matériau est nécessaire pour fabriquer une table d’enchantement ?",
+      "options": {
+        "a": "Diamant",
+        "b": "Bois uniquement",
+        "c": "Émeraude",
+        "d": "Quartz uniquement"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans Mario, quel objet donne généralement une vie supplémentaire ?",
+      "options": {
+        "a": "Pièce rouge",
+        "b": "Champignon vert",
+        "c": "Étoile",
+        "d": "Fleur de feu"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Dans The Legend of Zelda, comment s’appelle le héros principal ?",
+      "options": {
+        "a": "Zelda",
+        "b": "Link",
+        "c": "Ganon",
+        "d": "Epona"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Dans Pokémon, quel type possède Pikachu ?",
+      "options": {
+        "a": "Feu",
+        "b": "Électrik",
+        "c": "Eau",
+        "d": "Normal"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Dans Among Us, quel rôle sabote le vaisseau ?",
+      "options": {
+        "a": "Le Crewmate",
+        "b": "L’Imposteur",
+        "c": "Le Gardien",
+        "d": "Le Spectateur"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Dans Fortnite, quel est l’objectif principal du mode Battle Royale ?",
+      "options": {
+        "a": "Être le dernier survivant",
+        "b": "Construire la plus haute tour",
+        "c": "Capturer trois drapeaux",
+        "d": "Finir une course"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans Super Smash Bros., quel personnage est un plombier moustachu ?",
+      "options": {
+        "a": "Kirby",
+        "b": "Mario",
+        "c": "Fox",
+        "d": "Ness"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Dans League of Legends, comment appelle-t-on la carte principale classique ?",
+      "options": {
+        "a": "Summoner’s Rift",
+        "b": "Nexus Arena",
+        "c": "Runeterra Field",
+        "d": "Blue Rift"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans God of War, comment s’appelle le fils de Kratos ?",
+      "options": {
+        "a": "Atreus",
+        "b": "Baldur",
+        "c": "Mimir",
+        "d": "Brokk"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans GTA, que signifie l’abréviation GTA ?",
+      "options": {
+        "a": "Grand Theft Auto",
+        "b": "Global Tactical Action",
+        "c": "Great Town Adventure",
+        "d": "Grand Team Arena"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans Valorant, quel type de jeu est proposé principalement ?",
+      "options": {
+        "a": "FPS tactique",
+        "b": "Jeu de course",
+        "c": "RPG au tour par tour",
+        "d": "Simulation agricole"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans Clash Royale, que faut-il principalement détruire pour gagner une partie ?",
+      "options": {
+        "a": "Les tours adverses",
+        "b": "Les ressources de la carte",
+        "c": "Le chronomètre",
+        "d": "Les cartes du joueur"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans Elden Ring, comment appelle-t-on la monture du joueur ?",
+      "options": {
+        "a": "Torrent",
+        "b": "Shadowmere",
+        "c": "Roach",
+        "d": "Agro"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans Tetris, quelle forme est composée de quatre carrés alignés ?",
+      "options": {
+        "a": "T",
+        "b": "L",
+        "c": "I",
+        "d": "S"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Dans Animal Crossing, quel animal dirige les services aux résidents sur l’île ?",
+      "options": {
+        "a": "Tom Nook",
+        "b": "Kéké",
+        "c": "Marie",
+        "d": "Rounard"
+      },
+      "answer": "c"
+    },
+    {
+      "question": "Quel personnage est la mascotte principale de Sega ?",
+      "options": {
+        "a": "Sonic",
+        "b": "Kirby",
+        "c": "Crash",
+        "d": "Link"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans Pac-Man, que mange le joueur ?",
+      "options": {
+        "a": "Des anneaux",
+        "b": "Des pastilles",
+        "c": "Des diamants",
+        "d": "Des cartes"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Que signifie généralement RPG ?",
+      "options": {
+        "a": "Role-Playing Game",
+        "b": "Real Player Goal",
+        "c": "Rapid Puzzle Grid",
+        "d": "Random Power Generator"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans The Legend of Zelda, quel symbole réunit souvent trois triangles ?",
+      "options": {
+        "a": "La Triforce",
+        "b": "La Tricorne",
+        "c": "La Tri-Lame",
+        "d": "La Triflamme"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Quelle attaque est associée à Ryu dans Street Fighter ?",
+      "options": {
+        "a": "Hadoken",
+        "b": "Blue Shell",
+        "c": "Falcon Punch",
+        "d": "Spinjitzu"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Comment s’appelle le frère de Mario ?",
+      "options": {
+        "a": "Wario",
+        "b": "Luigi",
+        "c": "Waluigi",
+        "d": "Toad"
+      },
+      "answer": "b"
+    },
+    {
+      "question": "Quel jeu est considéré comme un FPS de science-fiction emblématique ?",
+      "options": {
+        "a": "Doom",
+        "b": "The Sims",
+        "c": "FIFA",
+        "d": "Stardew Valley"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans Portal, quel objet accompagne souvent le joueur ?",
+      "options": {
+        "a": "Un Companion Cube",
+        "b": "Une Master Ball",
+        "c": "Un Pokédex",
+        "d": "Une Triforce"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Quelle console Nintendo est connue pour ses manettes à détection de mouvement ?",
+      "options": {
+        "a": "Wii",
+        "b": "Game Boy",
+        "c": "NES",
+        "d": "Virtual Boy"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Quel genre décrit le mieux Resident Evil ?",
+      "options": {
+        "a": "Survival horror",
+        "b": "Simulation de vol",
+        "c": "Jeu musical",
+        "d": "Puzzle sportif"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Quelle est la couleur généralement associée à Kirby ?",
+      "options": {
+        "a": "Rose",
+        "b": "Orange",
+        "c": "Noir",
+        "d": "Vert"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Comment s’appelle le héros principal de Halo ?",
+      "options": {
+        "a": "Master Chief",
+        "b": "Solid Snake",
+        "c": "Gordon Freeman",
+        "d": "Duke Nukem"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Quel élément sert de point de repos dans Dark Souls ?",
+      "options": {
+        "a": "Un feu de camp",
+        "b": "Une fontaine",
+        "c": "Une borne d’arcade",
+        "d": "Un portail bleu"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Dans Rocket League, que conduisent les joueurs ?",
+      "options": {
+        "a": "Des voitures",
+        "b": "Des avions",
+        "c": "Des bateaux",
+        "d": "Des motos uniquement"
+      },
+      "answer": "a"
+    },
+    {
+      "question": "Sur quelle plateforme numérique peut-on acheter et lancer de nombreux jeux PC ?",
+      "options": {
+        "a": "Steam",
+        "b": "Canvas",
+        "c": "Moodle",
+        "d": "Notepad"
+      },
+      "answer": "a"
+    }
   ]
 }
