@@ -1,4 +1,3 @@
-
 [
   {
     "question": "Quel est le nom du village de Naruto ?",
@@ -3259,5 +3258,855 @@
       "d": "Toutes les réponses"
     },
     "answer": "d"
+  },
+  {
+    "question": "Dans One Piece, quel est le nom du sabre maudit de Zoro ?",
+    "options": {
+      "a": "Enma",
+      "b": "Yubashiri",
+      "c": "Wado Ichimonji",
+      "d": "Kikoku"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans One Piece, qui est le frère adoptif de Luffy et Ace ?",
+    "options": {
+      "a": "Sabo",
+      "b": "Koby",
+      "c": "Smoker",
+      "d": "Law"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans One Piece, quelle est la profession de Nami ?",
+    "options": {
+      "a": "Archéologue",
+      "b": "Navigatrice",
+      "c": "Médecin",
+      "d": "Charpentière"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans One Piece, quel est le rêve de Chopper ?",
+    "options": {
+      "a": "Trouver All Blue",
+      "b": "Devenir le meilleur épéiste",
+      "c": "Devenir un médecin capable de tout guérir",
+      "d": "Devenir amiral"
+    },
+    "answer": "c"
+  },
+  {
+    "question": "Dans One Piece, comment s'appelle l'île céleste visitée par l'équipage ?",
+    "options": {
+      "a": "Skypiea",
+      "b": "Water Seven",
+      "c": "Dressrosa",
+      "d": "Whole Cake Island"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans One Piece, qui a mangé le Hana Hana no Mi ?",
+    "options": {
+      "a": "Nico Robin",
+      "b": "Nami",
+      "c": "Boa Hancock",
+      "d": "Perona"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans One Piece, quel est le nom du navire de Barbe Blanche ?",
+    "options": {
+      "a": "Moby Dick",
+      "b": "Red Force",
+      "c": "Oro Jackson",
+      "d": "Queen Mama Chanter"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans One Piece, qui est le père de Luffy ?",
+    "options": {
+      "a": "Gol D. Roger",
+      "b": "Monkey D. Dragon",
+      "c": "Monkey D. Garp",
+      "d": "Silvers Rayleigh"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Naruto, quel est le clan de Hinata ?",
+    "options": {
+      "a": "Uchiha",
+      "b": "Nara",
+      "c": "Hyuga",
+      "d": "Aburame"
+    },
+    "answer": "c"
+  },
+  {
+    "question": "Dans Naruto, qui porte le masque de Tobi pendant une grande partie de l’histoire ?",
+    "options": {
+      "a": "Obito Uchiha",
+      "b": "Kakashi Hatake",
+      "c": "Shisui Uchiha",
+      "d": "Danzo Shimura"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Naruto, quelle est la spécialité du clan Nara ?",
+    "options": {
+      "a": "Les techniques de sable",
+      "b": "La manipulation des ombres",
+      "c": "Les insectes",
+      "d": "La copie des jutsu"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Naruto, qui est le frère de Sai ?",
+    "options": {
+      "a": "Shin",
+      "b": "Kiba",
+      "c": "Neji",
+      "d": "Yamato"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Naruto, quel animal invoque Jiraiya ?",
+    "options": {
+      "a": "Des serpents",
+      "b": "Des crapauds",
+      "c": "Des limaces",
+      "d": "Des singes"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Naruto, qui est le premier membre de l’Akatsuki à être vaincu dans Shippuden ?",
+    "options": {
+      "a": "Deidara",
+      "b": "Itachi",
+      "c": "Kakuzu",
+      "d": "Hidan"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Naruto, quel est le nom du père de Kakashi ?",
+    "options": {
+      "a": "Sakumo Hatake",
+      "b": "Fugaku Uchiha",
+      "c": "Hiashi Hyuga",
+      "d": "Hiruzen Sarutobi"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Naruto, quel élément est associé au Rasenshuriken de Naruto ?",
+    "options": {
+      "a": "Foudre",
+      "b": "Vent",
+      "c": "Feu",
+      "d": "Eau"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Dragon Ball, comment s'appelle la fusion de Goku et Vegeta avec les Potaras ?",
+    "options": {
+      "a": "Gogeta",
+      "b": "Vegetto",
+      "c": "Gotenks",
+      "d": "Kefla"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Dragon Ball, qui est le frère de Vegeta ?",
+    "options": {
+      "a": "Tarble",
+      "b": "Raditz",
+      "c": "Nappa",
+      "d": "Bardock"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Dragon Ball Z, qui bat Freezer sur Namek ?",
+    "options": {
+      "a": "Gohan",
+      "b": "Piccolo",
+      "c": "Goku",
+      "d": "Vegeta"
+    },
+    "answer": "c"
+  },
+  {
+    "question": "Dans Dragon Ball, quelle technique est principalement associée à Vegeta ?",
+    "options": {
+      "a": "Final Flash",
+      "b": "Kamehameha",
+      "c": "Makankosappo",
+      "d": "Genkidama"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Dragon Ball, quel est le nom du dieu de la destruction de l’univers 7 ?",
+    "options": {
+      "a": "Whis",
+      "b": "Beerus",
+      "c": "Shenron",
+      "d": "Zeno"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Dragon Ball, qui entraîne Gohan pendant la saga des Saiyans ?",
+    "options": {
+      "a": "Piccolo",
+      "b": "Krillin",
+      "c": "Yamcha",
+      "d": "Maître Kaiô"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Bleach, quelle est la fonction de Rukia Kuchiki au début de l’histoire ?",
+    "options": {
+      "a": "Quincy",
+      "b": "Shinigami",
+      "c": "Arrancar",
+      "d": "Fullbringer"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Bleach, quel est le nom du Bankai de Byakuya ?",
+    "options": {
+      "a": "Tensa Zangetsu",
+      "b": "Senbonzakura Kageyoshi",
+      "c": "Daiguren Hyorinmaru",
+      "d": "Hakka no Togame"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Bleach, qui est le capitaine de la dixième division ?",
+    "options": {
+      "a": "Toshiro Hitsugaya",
+      "b": "Kenpachi Zaraki",
+      "c": "Shunsui Kyoraku",
+      "d": "Mayuri Kurotsuchi"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Bleach, quelle est la nature de l’arme de Uryu Ishida ?",
+    "options": {
+      "a": "Zanpakuto",
+      "b": "Arc spirituel",
+      "c": "Marteau de Quincy",
+      "d": "Lance de glace"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Bleach, quel est le nom de la ville où vit Ichigo ?",
+    "options": {
+      "a": "Karakura",
+      "b": "Rukongai",
+      "c": "Seireitei",
+      "d": "Hueco Mundo"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Demon Slayer, quelle est la respiration de Zenitsu ?",
+    "options": {
+      "a": "Respiration de la Foudre",
+      "b": "Respiration de la Brume",
+      "c": "Respiration de la Pierre",
+      "d": "Respiration de la Fleur"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Demon Slayer, qui est le Pilier de l’Amour ?",
+    "options": {
+      "a": "Mitsuri Kanroji",
+      "b": "Shinobu Kocho",
+      "c": "Kanae Kocho",
+      "d": "Kanao Tsuyuri"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Demon Slayer, quel est le nom du corbeau de Tanjiro ?",
+    "options": {
+      "a": "Kasugai",
+      "b": "Chuntaro",
+      "c": "Ukogi",
+      "d": "Tengen"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Demon Slayer, qui a créé les marionnettes de la montagne Natagumo ?",
+    "options": {
+      "a": "Rui",
+      "b": "Akaza",
+      "c": "Enmu",
+      "d": "Daki"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Demon Slayer, quel est le lien entre Nezuko et Tanjiro ?",
+    "options": {
+      "a": "Ils sont cousins",
+      "b": "Ils sont frère et sœur",
+      "c": "Ils sont rivaux",
+      "d": "Ils sont maître et élève"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans My Hero Academia, comment s’appelle le héros professionnel qui enseigne à la classe 1-A ?",
+    "options": {
+      "a": "Present Mic",
+      "b": "Eraser Head",
+      "c": "Hawks",
+      "d": "Cementoss"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans My Hero Academia, quel est le vrai nom de Deku ?",
+    "options": {
+      "a": "Izuku Midoriya",
+      "b": "Tenya Iida",
+      "c": "Shoto Todoroki",
+      "d": "Hitoshi Shinso"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans My Hero Academia, quel est le Quirk de Eijiro Kirishima ?",
+    "options": {
+      "a": "Création",
+      "b": "Durcissement",
+      "c": "Lavage de cerveau",
+      "d": "Réfraction"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans My Hero Academia, qui est le frère de Dabi ?",
+    "options": {
+      "a": "Fumikage Tokoyami",
+      "b": "Shoto Todoroki",
+      "c": "Denki Kaminari",
+      "d": "Tamaki Amajiki"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans My Hero Academia, quelle est la spécialité de Momo Yaoyorozu ?",
+    "options": {
+      "a": "Créer des objets",
+      "b": "Contrôler les plantes",
+      "c": "Voler",
+      "d": "Arrêter le temps"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Jujutsu Kaisen, qui est le professeur de Yuji, Megumi et Nobara ?",
+    "options": {
+      "a": "Satoru Gojo",
+      "b": "Suguru Geto",
+      "c": "Kento Nanami",
+      "d": "Masamichi Yaga"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Jujutsu Kaisen, quel est le nom de la technique de Megumi ?",
+    "options": {
+      "a": "Dix Ombres",
+      "b": "Six Yeux",
+      "c": "Projection Sorcery",
+      "d": "Boogie Woogie"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Jujutsu Kaisen, quel objet Yuji avale-t-il au début ?",
+    "options": {
+      "a": "Un doigt de Sukuna",
+      "b": "Une relique de Gojo",
+      "c": "Une graine maudite",
+      "d": "Une bague ancienne"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Jujutsu Kaisen, qui utilise la technique Boogie Woogie ?",
+    "options": {
+      "a": "Todo",
+      "b": "Inumaki",
+      "c": "Panda",
+      "d": "Maki"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Hunter x Hunter, quel est le nom du meilleur ami de Gon ?",
+    "options": {
+      "a": "Kurapika",
+      "b": "Leorio",
+      "c": "Killua",
+      "d": "Hisoka"
+    },
+    "answer": "c"
+  },
+  {
+    "question": "Dans Hunter x Hunter, quelle est la profession de Leorio qu’il souhaite exercer ?",
+    "options": {
+      "a": "Médecin",
+      "b": "Chasseur de primes",
+      "c": "Forgeron",
+      "d": "Professeur"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Hunter x Hunter, de quelle famille Killua est-il issu ?",
+    "options": {
+      "a": "Zoldyck",
+      "b": "Freecss",
+      "c": "Nostrade",
+      "d": "Kurta"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Hunter x Hunter, quelle couleur ont les yeux du clan Kurta lorsqu’ils sont en colère ?",
+    "options": {
+      "a": "Bleu vif",
+      "b": "Rouge écarlate",
+      "c": "Vert émeraude",
+      "d": "Violet"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans L’Attaque des Titans, comment s’appelle la ville natale d’Eren ?",
+    "options": {
+      "a": "Shiganshina",
+      "b": "Trost",
+      "c": "Mitras",
+      "d": "Stohess"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans L’Attaque des Titans, quel est le grade de Levi ?",
+    "options": {
+      "a": "Capitaine",
+      "b": "Major",
+      "c": "Général",
+      "d": "Cadet"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans L’Attaque des Titans, quel pouvoir possède le Titan Marteau d’Armes ?",
+    "options": {
+      "a": "Créer des armes avec sa chair durcie",
+      "b": "Contrôler les océans",
+      "c": "Voler naturellement",
+      "d": "Lire les pensées"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans L’Attaque des Titans, qui est la meilleure amie d’Eren depuis l’enfance ?",
+    "options": {
+      "a": "Historia",
+      "b": "Mikasa",
+      "c": "Annie",
+      "d": "Sasha"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Fullmetal Alchemist, quel est le métier de Winry Rockbell ?",
+    "options": {
+      "a": "Mécanicienne d’automail",
+      "b": "Médecin militaire",
+      "c": "Alchimiste d’État",
+      "d": "Exploratrice"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Fullmetal Alchemist, quel est le principe fondamental de l’alchimie ?",
+    "options": {
+      "a": "L’échange équivalent",
+      "b": "La loi du plus fort",
+      "c": "La loi des cinq éléments",
+      "d": "La mémoire du sang"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Fullmetal Alchemist, quel est le surnom de Roy Mustang ?",
+    "options": {
+      "a": "L’Alchimiste de Flamme",
+      "b": "L’Alchimiste de Glace",
+      "c": "L’Alchimiste de Fer",
+      "d": "L’Alchimiste de l’Ombre"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Pokémon, quel est le premier Pokémon de Sacha dans l’anime ?",
+    "options": {
+      "a": "Pikachu",
+      "b": "Salamèche",
+      "c": "Carapuce",
+      "d": "Bulbizarre"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Pokémon, quelle est l’évolution de Pikachu avec une Pierre Foudre ?",
+    "options": {
+      "a": "Raichu",
+      "b": "Pichu",
+      "c": "Electrode",
+      "d": "Luxray"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Pokémon, qui est le chef de la Team Rocket ?",
+    "options": {
+      "a": "Giovanni",
+      "b": "James",
+      "c": "Miaouss",
+      "d": "Butch"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Pokémon, quel type est super efficace contre le type Eau ?",
+    "options": {
+      "a": "Électrik",
+      "b": "Feu",
+      "c": "Roche",
+      "d": "Poison"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Haikyuu!!, à quel poste joue principalement Shoyo Hinata ?",
+    "options": {
+      "a": "Libéro",
+      "b": "Passeur",
+      "c": "Central",
+      "d": "Réceptionneur"
+    },
+    "answer": "c"
+  },
+  {
+    "question": "Dans Haikyuu!!, comment s’appelle l’équipe de Hinata au lycée ?",
+    "options": {
+      "a": "Nekoma",
+      "b": "Karasuno",
+      "c": "Aoba Johsai",
+      "d": "Fukurodani"
+    },
+    "answer": "b"
+  },
+  {
+    "question": "Dans Black Clover, quel est le rêve d’Asta ?",
+    "options": {
+      "a": "Devenir Empereur-Mage",
+      "b": "Devenir capitaine pirate",
+      "c": "Trouver un dragon",
+      "d": "Devenir roi des démons"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Black Clover, quelle magie utilise Yuno ?",
+    "options": {
+      "a": "Magie du Vent",
+      "b": "Magie du Feu",
+      "c": "Magie des Fils",
+      "d": "Magie du Sable"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Fairy Tail, quel est le pouvoir principal de Natsu ?",
+    "options": {
+      "a": "Dragon Slayer de Feu",
+      "b": "Magie de Glace",
+      "c": "Magie des Cartes",
+      "d": "Magie Céleste"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Fairy Tail, quel est le nom du chat bleu qui accompagne Natsu ?",
+    "options": {
+      "a": "Happy",
+      "b": "Carla",
+      "c": "Panther Lily",
+      "d": "Frosch"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans JoJo’s Bizarre Adventure, comment s’appelle le Stand de Jotaro ?",
+    "options": {
+      "a": "Star Platinum",
+      "b": "The World",
+      "c": "Crazy Diamond",
+      "d": "Gold Experience"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans JoJo’s Bizarre Adventure, qui est le principal antagoniste de Stardust Crusaders ?",
+    "options": {
+      "a": "Dio Brando",
+      "b": "Kars",
+      "c": "Diavolo",
+      "d": "Kira Yoshikage"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Tokyo Ghoul, quelle partie du corps de Rize est transplantée à Kaneki ?",
+    "options": {
+      "a": "Ses organes",
+      "b": "Son œil",
+      "c": "Son bras",
+      "d": "Son cerveau"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Tokyo Ghoul, quel café sert de refuge aux goules pacifiques ?",
+    "options": {
+      "a": "Anteiku",
+      "b": "Cochlea",
+      "c": "Aogiri",
+      "d": "Root A"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Spy x Family, quel pouvoir possède Anya ?",
+    "options": {
+      "a": "Télépathie",
+      "b": "Télékinésie",
+      "c": "Invisibilité",
+      "d": "Précognition parfaite"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Spy x Family, quelle est la profession secrète de Yor ?",
+    "options": {
+      "a": "Assassin",
+      "b": "Espionne",
+      "c": "Détective",
+      "d": "Voleuse"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Chainsaw Man, quel démon accompagne Denji ?",
+    "options": {
+      "a": "Pochita",
+      "b": "Kon",
+      "c": "Beam",
+      "d": "Nayuta"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Chainsaw Man, quel est le métier de Denji au début de l’histoire ?",
+    "options": {
+      "a": "Chasseur de démons indépendant",
+      "b": "Policier",
+      "c": "Étudiant",
+      "d": "Cuisinier"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Sailor Moon, quelle est l’identité civile de Sailor Moon ?",
+    "options": {
+      "a": "Usagi Tsukino",
+      "b": "Ami Mizuno",
+      "c": "Rei Hino",
+      "d": "Minako Aino"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Sailor Moon, quel est le nom du chat noir qui guide Usagi ?",
+    "options": {
+      "a": "Luna",
+      "b": "Artemis",
+      "c": "Diana",
+      "d": "Helios"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Code Geass, quel pouvoir Lelouch reçoit-il ?",
+    "options": {
+      "a": "Le Geass",
+      "b": "Le Nen",
+      "c": "L’Alchimie",
+      "d": "Le Sharingan"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Code Geass, quel est le surnom de Lelouch lorsqu’il pilote la rébellion ?",
+    "options": {
+      "a": "Zero",
+      "b": "Knightmare",
+      "c": "Ragnarok",
+      "d": "Britannia"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Sword Art Online, comment s’appelle le protagoniste ?",
+    "options": {
+      "a": "Kirito",
+      "b": "Klein",
+      "c": "Eugeo",
+      "d": "Heathcliff"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Sword Art Online, quel est le prénom de l’héroïne principale de la première partie ?",
+    "options": {
+      "a": "Asuna",
+      "b": "Sinon",
+      "c": "Alice",
+      "d": "Leafa"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Dr. Stone, quel est le talent exceptionnel de Senku ?",
+    "options": {
+      "a": "La science",
+      "b": "La cuisine",
+      "c": "La musique",
+      "d": "La magie"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Dr. Stone, combien d’années Senku compte-t-il mentalement après la pétrification ?",
+    "options": {
+      "a": "3700 ans",
+      "b": "1000 ans",
+      "c": "500 ans",
+      "d": "10 000 ans"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Mob Psycho 100, quel est le prénom du héros surnommé Mob ?",
+    "options": {
+      "a": "Shigeo Kageyama",
+      "b": "Arataka Reigen",
+      "c": "Ritsu Kageyama",
+      "d": "Teruki Hanazawa"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Vinland Saga, quel est le rêve de Thorfinn après sa vengeance ?",
+    "options": {
+      "a": "Construire un pays sans guerre",
+      "b": "Devenir roi d’Angleterre",
+      "c": "Trouver le One Piece",
+      "d": "Devenir pirate"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Blue Lock, quel sport est au centre de l’histoire ?",
+    "options": {
+      "a": "Football",
+      "b": "Basket-ball",
+      "c": "Tennis",
+      "d": "Base-ball"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Assassination Classroom, quelle est la particularité de Koro-sensei ?",
+    "options": {
+      "a": "C’est une créature jaune extrêmement rapide",
+      "b": "C’est un robot géant",
+      "c": "C’est un fantôme invisible",
+      "d": "C’est un dragon"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Classroom of the Elite, quel est le prénom de Ayanokoji ?",
+    "options": {
+      "a": "Kiyotaka",
+      "b": "Yosuke",
+      "c": "Manabu",
+      "d": "Ken"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans Re:Zero, quel pouvoir Subaru possède-t-il ?",
+    "options": {
+      "a": "Retour par la mort",
+      "b": "Contrôle du feu",
+      "c": "Téléportation libre",
+      "d": "Immortalité permanente"
+    },
+    "answer": "a"
+  },
+  {
+    "question": "Dans The Promised Neverland, quel est le numéro de Grace Field House d’Emma ?",
+    "options": {
+      "a": "63194",
+      "b": "81194",
+      "c": "22194",
+      "d": "10001"
+    },
+    "answer": "a"
   }
 ]

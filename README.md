@@ -238,6 +238,10 @@ NOM_BOT=🤖 OVL-MD BOT V2
 
 ---
 
+### 🎮 Jeux et quiz de groupe
+
+Le bot inclut désormais des jeux jouables à plusieurs dans un groupe : `.pendu`, `.anagramme`, `.quizanimeplus`, `.quizculture`, `.quizfoot`, `.quizgaming` et `.vraioufaux`. Utilise `.jeux` pour afficher l’aide, relance la commande du jeu pour proposer une réponse, `.scorejeux` pour consulter le classement et `.stopjeu` pour arrêter une partie. Les parties et les scores sont conservés en mémoire et sont réinitialisés lors d’un redémarrage du bot.
+
 ### 🌍 Rejoins la Communauté OVL
 
 [![WhatsApp Support](https://img.shields.io/badge/Support%20WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/BP1oOMh0QvR7H3vvO9bRYK)
