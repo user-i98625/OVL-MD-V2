@@ -96,9 +96,15 @@ function clearLater(groupId, timeout = 5 * 60 * 1000) {
   if (game && game.timer) clearTimeout(game.timer);
   if (game) {
     game.timer = setTimeout(() => {
-      if (activeGames.get(groupId) === game) activeGames.delete(groupId);
+      if (activeGames.get(groupId) === game) endGame(groupId);
     }, timeout);
   }
+}
+
+function endGame(groupId) {
+  const game = activeGames.get(groupId);
+  if (game && game.timer) clearTimeout(game.timer);
+  activeGames.delete(groupId);
 }
 
 function startChoiceQuiz(groupId, mode, bank, commandName) {
@@ -226,7 +232,7 @@ for (const [commandName, mode, bank] of [
     }
     if (answer === current.answer) {
       const points = addPoint(jid, auteur_Message);
-      activeGames.delete(jid);
+      endGame(jid);
       await reply(repondre, `✅ Bonne réponse, @${senderName(auteur_Message)} ! Tu gagnes 1 point et tu totalises ${points}.\n\nRelance ".${commandName}" pour la prochaine question.`);
     } else {
       await reply(repondre, '❌ Mauvaise réponse. La partie continue : essaie encore avec a, b, c ou d.');
@@ -255,7 +261,7 @@ ovlcmd({
   }
   if (answer === current.answer) {
     const points = addPoint(jid, auteur_Message);
-    activeGames.delete(jid);
+    endGame(jid);
     await reply(repondre, `✅ Exact, @${senderName(auteur_Message)} ! +1 point, total : ${points}.\n\nRelance ".vraioufaux" pour continuer.`);
   } else {
     await reply(repondre, '❌ Raté. La partie continue : réponds encore vrai ou faux.');
@@ -291,7 +297,7 @@ ovlcmd({
     if (!game.word.includes(letter)) game.errors += 1;
   } else if (guess.toUpperCase() === game.word) {
     const points = addPoint(jid, auteur_Message);
-    activeGames.delete(jid);
+    endGame(jid);
     await reply(repondre, `🏆 @${senderName(auteur_Message)} a trouvé le mot *${game.word}* ! +1 point, total : ${points}.`);
     return;
   } else {
@@ -300,10 +306,10 @@ ovlcmd({
   const won = [...game.word].every((letter) => game.guessed.has(letter));
   if (won) {
     const points = addPoint(jid, auteur_Message);
-    activeGames.delete(jid);
+    endGame(jid);
     await reply(repondre, `🏆 Le groupe a trouvé *${game.word}* ! @${senderName(auteur_Message)} reçoit 1 point, total : ${points}.`);
   } else if (game.errors >= game.maxErrors) {
-    activeGames.delete(jid);
+    endGame(jid);
     await reply(repondre, `💥 Partie terminée ! Le mot était *${game.word}*.`);
   } else {
     await reply(repondre, showHangman(game));
@@ -331,7 +337,7 @@ ovlcmd({
   }
   if (guess === clean(game.word)) {
     const points = addPoint(jid, auteur_Message);
-    activeGames.delete(jid);
+    endGame(jid);
     await reply(repondre, `✅ Bravo @${senderName(auteur_Message)} ! Le mot était *${game.word}*. +1 point, total : ${points}.`);
   } else {
     await reply(repondre, '❌ Ce n’est pas le bon mot. Les autres joueurs peuvent encore essayer.');
@@ -361,7 +367,7 @@ ovlcmd({
     await reply(repondre, 'ℹ️ Aucune partie active dans ce groupe.');
     return;
   }
-  activeGames.delete(jid);
+  endGame(jid);
   await reply(repondre, '🛑 La partie a été arrêtée.');
 });
 
