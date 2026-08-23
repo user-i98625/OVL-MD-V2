@@ -252,6 +252,12 @@ La commande `.quizz <animé>` cherche une banque déjà enregistrée. Par exempl
 
 La génération automatique nécessite la variable secrète `OPENAI_API_KEY` dans Render. Une variable optionnelle `QUIZ_AI_MODEL` permet de choisir le modèle, et `QUIZ_AI_BASE_URL` permet d’utiliser un endpoint compatible OpenAI. Le cache évite de régénérer les questions à chaque partie ; il peut toutefois être perdu lors d’un redéploiement si l’hébergeur ne fournit pas de disque persistant.
 
+### ✨ Pack de divertissement anime
+
+Le module `PackFun.js` ajoute des animations sans service externe : `.persodujour`, `.monpersonnage`, `.combat`, `.fusion`, `.quisuisje`, `.citationanime`, `.opening`, `.blindtest`, `.devineimage`, `.devine`, `.indice`, `.tournoi`, `.vote`, `.tierlist`, `.tier`, `.roulette`, `.pileface`, `.de`, `.defi`, `.actionverite`, `.histoire`, `.aventure`, `.choix`, `.rpg`, `.rpgstats`, `.bingoanime`, `.awards`, `.journalgroupe`, `.meteoanime`, `.horoscopeanime`, `.prediction`, `.rivalite`, `.memeanime`, `.eventanime`, `.concoursphoto`, `.scorefun` et `.stopfun`.
+
+Les parties créatives utilisent l’identifiant du groupe pour éviter les mélanges entre groupes. Les commandes `.histoire`, `.aventure`, `.rpg` et les jeux de devinettes gardent leur état en mémoire pendant l’exécution du bot ; un redémarrage réinitialise les parties en cours. Les scores fun actuels sont également en mémoire, tandis que les scores des quiz restent gérés par le module de jeux existant.
+
 ### 🧞 Akinator
 
 La commande `.akinator` lance une partie Akinator en français dans un groupe. Les participants répondent avec `1` pour Oui, `2` pour Non, `3` pour Je ne sais pas, `4` pour Probablement oui ou `5` pour Probablement non. Quand Akinator propose un personnage, le groupe répond `oui` ou `non`. Le créateur, un administrateur ou un sudo peut envoyer `stop`, `.stopakinator` ou utiliser `.stopakinator` pour arrêter la partie. Une seule partie Akinator peut être active par groupe.

@@ -405,6 +405,15 @@ ovlcmd({
     '• `.scorejeux` — scores du groupe\n' +
     '• `.stopjeu` — arrêter la partie active\n' +
     '• `.stopakinator` — arrêter Akinator\n\n' +
+    '✨ *Pack anime et groupe*\n' +
+    '• `.persodujour`, `.monpersonnage`, `.combat`, `.fusion`\n' +
+    '• `.quisuisje`, `.citationanime`, `.opening`, `.blindtest`\n' +
+    '• `.devine`, `.indice`, `.devineimage`, `.tierlist`, `.tier`\n' +
+    '• `.tournoi`, `.vote`, `.roulette`, `.pileface`, `.de`, `.defi`\n' +
+    '• `.actionverite`, `.histoire`, `.aventure`, `.choix`\n' +
+    '• `.rpg`, `.rpgstats`, `.bingoanime`, `.awards`, `.journalgroupe`\n' +
+    '• `.meteoanime`, `.horoscopeanime`, `.prediction`, `.rivalite`, `.memeanime`\n' +
+    '• `.eventanime`, `.concoursphoto`, `.scorefun`, `.stopfun`\n\n' +
     'Après le lancement, le créateur choisit 1, 2 ou 3. Ensuite, tout le groupe répond avec 1, 2, 3 ou 4.');
 });
 
