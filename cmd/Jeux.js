@@ -1,6 +1,7 @@
 const { ovlcmd } = require('../lib/ovlcmd');
 const animeQuestions = require('../lib/aquizz.json');
 const extraQuiz = require('../lib/quiz_nouveaux.json');
+const thematicQuiz = require('../lib/thematic_quiz');
 let Sudo;
 try {
   ({ Sudo } = require('../DataBase/sudo'));
@@ -396,6 +397,8 @@ ovlcmd({
     '• `.quizz-gaming` — quiz jeux vidéo\n' +
     '• `.quizz-cultire-g` — culture générale\n' +
     '• `.quizz-foot` — quiz football\n' +
+    '• `.quizz <animé>` — génère ou réutilise un quiz thématique\n' +
+    '• `.quizz-refresh <animé>` — régénère la banque thématique\n' +
     '• `.akinator` — deviner un personnage avec Akinator\n' +
     '• `.pendu` — pendu collaboratif\n' +
     '• `.anagramme` — mot mélangé à deviner\n' +
@@ -403,6 +406,65 @@ ovlcmd({
     '• `.stopjeu` — arrêter la partie active\n' +
     '• `.stopakinator` — arrêter Akinator\n\n' +
     'Après le lancement, le créateur choisit 1, 2 ou 3. Ensuite, tout le groupe répond avec 1, 2, 3 ou 4.');
+});
+
+async function handleThematicQuizCommand({ jid, sock, repondre, auteur_Message, getJid, arg }, forceRefresh = false) {
+  if (!isGroup(jid)) {
+    await reply(repondre, '❌ Les quizz sont disponibles uniquement dans les groupes.');
+    return;
+  }
+  const topic = thematicQuiz.normalizeTopic(textArg(arg));
+  if (!topic) {
+    await reply(repondre, '❌ Indique un animé. Exemple : `.quizz yu gi oh`.');
+    return;
+  }
+  if (activeGames.has(jid)) {
+    await reply(repondre, '⚠️ Un autre jeu ou quizz est déjà en cours dans ce groupe.');
+    return;
+  }
+  const setup = {
+    type: 'quiz-setup',
+    groupId: jid,
+    mode: 'thematic',
+    label: topic,
+    starter: auteur_Message
+  };
+  activeGames.set(jid, setup);
+  try {
+    if (forceRefresh) thematicQuiz.clearQuizCache(topic);
+    await reply(repondre, `🔎 Je ${forceRefresh ? 'régénère' : 'cherche'} la banque de questions pour *${topic}*…`);
+    const result = await thematicQuiz.loadOrGenerateQuiz(topic);
+    setup.label = result.topic;
+    setup.bank = result.questions;
+    await reply(repondre, result.cached
+      ? `✅ Banque trouvée pour *${result.topic}*. Je la réutilise.\n\n${setupPrompt(result.topic)}`
+      : `✨ Banque créée pour *${result.topic}* et sauvegardée.\n\n${setupPrompt(result.topic)}`);
+    await chooseQuizLength(jid, sock, setup, { mode: 'thematic', label: result.topic, bank: result.questions }, getJid);
+  } catch (error) {
+    endGame(jid);
+    console.error('[Quiz thématique]', error);
+    await reply(repondre, `❌ Impossible de préparer le quiz sur *${topic}* pour le moment. ${error.message.includes('OPENAI_API_KEY') ? 'Ajoute OPENAI_API_KEY dans les variables Render.' : 'Réessaie plus tard.'}`);
+  }
+}
+
+ovlcmd({
+  nom_cmd: 'quizz',
+  alias: ['quiz', 'quizzanimeperso', 'quizz-theme'],
+  classe: 'Jeux',
+  react: '🧠',
+  desc: 'Génère ou réutilise un quiz de 30 questions sur un animé.'
+}, async (jid, sock, context) => {
+  await handleThematicQuizCommand({ jid, sock, ...context });
+});
+
+ovlcmd({
+  nom_cmd: 'quizz-refresh',
+  alias: ['quiz-refresh', 'refreshquizz'],
+  classe: 'Jeux',
+  react: '🔄',
+  desc: 'Régénère la banque de questions d’un animé.'
+}, async (jid, sock, context) => {
+  await handleThematicQuizCommand({ jid, sock, ...context }, true);
 });
 
 ovlcmd({

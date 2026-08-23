@@ -246,6 +246,12 @@ Le bot inclut désormais des jeux jouables à plusieurs dans un groupe : `.pendu
 
 Les commandes présentes dans `cmd/` sont chargées normalement. Les plugins distants sont désactivés par défaut afin d’éviter qu’un plugin externe, une URL inaccessible ou une dépendance npm bloque le démarrage du bot sur Render. Pour les réactiver volontairement, ajoute la variable d’environnement `ENABLE_REMOTE_PLUGINS=true`, mais il est recommandé de les tester séparément avant de le faire en production.
 
+### 🧠 Quiz thématique à la demande
+
+La commande `.quizz <animé>` cherche une banque déjà enregistrée. Par exemple, `.quizz yu gi oh` utilise le cache si la banque existe ; sinon, le bot génère 30 questions à choix multiples en français, les valide et les sauvegarde dans `lib/quiz_cache/`. Le créateur choisit ensuite 10, 20 ou 30 questions comme pour les autres quizz. Pour régénérer volontairement une banque, utilise `.quizz-refresh <animé>`.
+
+La génération automatique nécessite la variable secrète `OPENAI_API_KEY` dans Render. Une variable optionnelle `QUIZ_AI_MODEL` permet de choisir le modèle, et `QUIZ_AI_BASE_URL` permet d’utiliser un endpoint compatible OpenAI. Le cache évite de régénérer les questions à chaque partie ; il peut toutefois être perdu lors d’un redéploiement si l’hébergeur ne fournit pas de disque persistant.
+
 ### 🧞 Akinator
 
 La commande `.akinator` lance une partie Akinator en français dans un groupe. Les participants répondent avec `1` pour Oui, `2` pour Non, `3` pour Je ne sais pas, `4` pour Probablement oui ou `5` pour Probablement non. Quand Akinator propose un personnage, le groupe répond `oui` ou `non`. Le créateur, un administrateur ou un sudo peut envoyer `stop`, `.stopakinator` ou utiliser `.stopakinator` pour arrêter la partie. Une seule partie Akinator peut être active par groupe.
