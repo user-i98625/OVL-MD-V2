@@ -1,4 +1,5 @@
 const { ovlcmd } = require('../lib/ovlcmd');
+const axios = require('axios');
 
 const sessions = new Map();
 const funScores = new Map();
@@ -81,6 +82,24 @@ function characterCard(character) {
 function genericGuessText(game) {
   return `${game.icon} *${game.title}*\n\n${game.clue}\n\n💬 Réponds avec *.devine nom*\n💡 *.indice* pour un indice\n🛑 *.stopdevine* pour arrêter.`;
 }
+async function getAnimeCharacterImage(query) {
+  try {
+    const response = await axios.get(`https://api.jikan.moe/v4/characters?q=${encodeURIComponent(query)}&limit=1`, { timeout: 7000 });
+    const result = response?.data?.data?.[0];
+    return result?.images?.jpg?.image_url || result?.images?.webp?.image_url || null;
+  } catch (_) {
+    return null;
+  }
+}
+async function sendImage(sock, jid, url, caption, mentions = []) {
+  if (!url || !sock || typeof sock.sendMessage !== 'function') return false;
+  try {
+    await sock.sendMessage(jid, { image: { url }, caption, mentions });
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
 function groupOnly(jid, repondre) {
   if (isGroup(jid)) return true;
   reply(repondre, '❌ Cette fonction est réservée aux groupes.');
@@ -89,7 +108,9 @@ function groupOnly(jid, repondre) {
 
 ovlcmd({ nom_cmd: 'persodujour', alias: ['personnagedujour', 'dailycharacter'], classe: 'Fun', react: '🌟', desc: 'Affiche le personnage anime du jour.' }, async (jid, sock, { repondre }) => {
   const character = pick(characters, todaySeed());
-  await reply(repondre, `🌟 *Personnage anime du jour*\n\n${characterCard(character)}\n\n📅 Reviens demain pour une nouvelle légende.`);
+  const caption = `🌟 *Personnage anime du jour*\n\n${characterCard(character)}\n\n📅 Reviens demain pour une nouvelle légende.`;
+  const image = await getAnimeCharacterImage(character.name);
+  if (!(await sendImage(sock, jid, image, caption))) await reply(repondre, caption);
 });
 
 ovlcmd({ nom_cmd: 'monpersonnage', alias: ['createurpersonnage', 'personnage'], classe: 'Fun', react: '🧬', desc: 'Génère un personnage anime personnalisé.' }, async (jid, sock, { repondre, auteur_Message, arg }) => {
@@ -129,7 +150,11 @@ async function startClueGame(jid, repondre, game) {
 ovlcmd({ nom_cmd: 'quisuisje', alias: ['devineperso', 'whami'], classe: 'Fun', react: '🕵️', desc: 'Devine un personnage anime avec des indices.' }, async (jid, sock, { repondre }) => {
   if (!groupOnly(jid, repondre)) return;
   const character = pick(characters);
-  await startClueGame(jid, repondre, { icon: '🕵️', title: 'Qui suis-je ?', clue: `Je viens de ${character.anime}. Mon pouvoir est lié à ${character.power}. Qui suis-je ?`, answer: character.name, hint: `Mon prénom commence par ${character.name[0]}.` });
+  const game = { icon: '🕵️', title: 'Qui suis-je ?', clue: `Je viens de ${character.anime}. Mon pouvoir est lié à ${character.power}. Qui suis-je ?`, answer: character.name, hint: `Mon prénom commence par ${character.name[0]}.`, attempts: 0 };
+  clueGames.set(jid, game);
+  const image = await getAnimeCharacterImage(character.name);
+  const text = genericGuessText(game);
+  if (!(await sendImage(sock, jid, image, text))) await reply(repondre, text);
 });
 ovlcmd({ nom_cmd: 'citationanime', alias: ['citationmystere'], classe: 'Fun', react: '💬', desc: 'Devine le personnage d’une citation anime.' }, async (jid, sock, { repondre }) => {
   if (!groupOnly(jid, repondre)) return;
@@ -247,16 +272,30 @@ ovlcmd({ nom_cmd: 'prediction', alias: ['predire'], classe: 'Fun', react: '🔮'
 ovlcmd({ nom_cmd: 'rivalite', alias: ['rival'], classe: 'Fun', react: '🥊', desc: 'Compare deux membres du groupe.' }, async (jid, sock, { repondre, auteur_Message, arg }) => { const target = targetFrom(arg, null) || auteur_Message; const scoreA = 40 + Math.floor(Math.random() * 61); const scoreB = 40 + Math.floor(Math.random() * 61); await reply(repondre, `🥊 *RIVALITÉ*\n\n@${userName(auteur_Message)} : ${scoreA}/100\n@${userName(target)} : ${scoreB}/100\n\n🏆 ${scoreA >= scoreB ? `@${userName(auteur_Message)}` : `@${userName(target)}`} remporte le duel symbolique.`); });
 ovlcmd({ nom_cmd: 'memeanime', alias: ['meme'], classe: 'Fun', react: '😂', desc: 'Génère un scénario de mème anime.' }, async (jid, sock, { repondre }) => { await reply(repondre, `😂 *MÈME DU JOUR*\n\nQuand tu dis « je regarde juste un épisode » et que le soleil se lève déjà.\n\nPersonnage principal : ${pick(characters).name}`); });
 ovlcmd({ nom_cmd: 'bingoanime', alias: ['bingo'], classe: 'Fun', react: '🎯', desc: 'Génère une grille de bingo anime.' }, async (jid, sock, { repondre }) => { const cells = ['flashback triste', 'attaque nommée', 'rival arrogant', 'pouvoir caché', 'repas spectaculaire', 'promesse de héros', 'transformation', 'personnage mort', 'cri de guerre']; await reply(repondre, `🎯 *BINGO ANIME*\n\n${cells.slice(0, 3).join(' | ')}\n${cells.slice(3, 6).join(' | ')}\n${cells.slice(6, 9).join(' | ')}\n\nLe premier à repérer une ligne écrit *.bingo gagné*.`); });
-ovlcmd({ nom_cmd: 'awards', alias: ['awardsgroupe', 'titres'], classe: 'Fun', react: '🏅', desc: 'Attribue des titres humoristiques au groupe.' }, async (jid, sock, { repondre }) => { if (!groupOnly(jid, repondre)) return; let people = []; try { const metadata = await sock.groupMetadata(jid); people = (metadata.participants || []).map((item) => item.id || item.jid).filter(Boolean); } catch (_) {} const selected = people.length ? people : ['joueur']; await reply(repondre, `🏅 *AWARDS DU GROUPE*\n\n${selected.slice(0, 6).map((person, index) => `${pick(['🥇', '🥈', '🥉', '🏅', '🎖️', '⭐'], index)} @${userName(person)} — *${pick(titles, index)}*`).join('\n')}`); });
+ovlcmd({ nom_cmd: 'awards', alias: ['awardsgroupe', 'titres'], classe: 'Fun', react: '🏅', desc: 'Attribue des titres humoristiques au groupe.' }, async (jid, sock, { repondre }) => {
+  if (!groupOnly(jid, repondre)) return;
+  let people = [];
+  try { const metadata = await sock.groupMetadata(jid); people = (metadata.participants || []).map((item) => item.id || item.jid).filter(Boolean); } catch (_) {}
+  const selected = people.length ? people.slice(0, 6) : [];
+  if (!selected.length) { await reply(repondre, 'ℹ️ Impossible de récupérer les membres du groupe pour les awards.'); return; }
+  const text = `🏅 *AWARDS DU GROUPE*\n\n${selected.map((person, index) => `${pick(['🥇', '🥈', '🥉', '🏅', '🎖️', '⭐'], index)} @${userName(person)} — *${pick(titles, index)}*`).join('\n')}`;
+  if (sock && typeof sock.sendMessage === 'function') await sock.sendMessage(jid, { text, mentions: selected });
+  else await reply(repondre, text);
+});
 ovlcmd({ nom_cmd: 'journalgroupe', alias: ['journalanime'], classe: 'Fun', react: '📰', desc: 'Génère le journal humoristique du groupe.' }, async (jid, sock, { repondre }) => { await reply(repondre, `📰 *JOURNAL DU GROUPE*\n\n• Une nouvelle légende est née dans les quiz.\n• Le débat du jour n’a toujours pas trouvé de vainqueur.\n• La météo annonce un risque élevé de spoilers.\n• Prochaine édition : après le prochain événement historique.`); });
 ovlcmd({ nom_cmd: 'eventanime', alias: ['event'], classe: 'Fun', react: '🎉', desc: 'Affiche un événement anime temporaire.' }, async (jid, sock, { repondre }) => { await reply(repondre, `🎉 *ÉVÉNEMENT DU GROUPE*\n\n${pick(['Semaine des rivalités : les duels rapportent double.', 'Festival des openings : chaque bonne réponse vaut un bonus.', 'Arc du héros : les défis du jour donnent des points fun.', 'Tournoi légendaire : choisissez votre champion avec `.tournoi`.'])}`); });
 ovlcmd({ nom_cmd: 'scorefun', alias: ['pointsfun', 'topfun'], classe: 'Fun', react: '🏆', desc: 'Affiche les points des activités fun.' }, async (jid, sock, { repondre }) => { const score = funScores.get(jid) || 0; await reply(repondre, `🏆 Points fun de ce groupe : *${score}*\n\nLes points sont gagnés avec les devinettes et activités compatibles.`); });
 ovlcmd({ nom_cmd: 'stopfun', alias: ['stopaventure', 'stoprpg'], classe: 'Fun', react: '🛑', desc: 'Arrête les activités créatives du groupe.' }, async (jid, sock, { repondre }) => { clueGames.delete(jid); tournamentGames.delete(jid); adventureGames.delete(jid); sessions.delete(`story:${jid}`); await reply(repondre, '🛑 Les activités créatives du groupe ont été arrêtées.'); });
 
 ovlcmd({ nom_cmd: 'devineimage', alias: ['imagequiz', 'imageanime'], classe: 'Fun', react: '🖼️', desc: 'Lance une devinette visuelle anime.' }, async (jid, sock, { repondre }) => {
+  if (!groupOnly(jid, repondre)) return;
   const character = pick(characters);
   const clues = ['Indice visuel : silhouette aux cheveux reconnaissables.', `Indice visuel : son anime est ${character.anime}.`, `Indice final : son pouvoir est ${character.power}.`];
-  await startClueGame(jid, repondre, { icon: '🖼️', title: 'Image mystère', clue: `${clues[0]}\n\nRéponds avec *.devine nom*.`, answer: character.name, hint: clues.slice(1).join(' ') });
+  const game = { icon: '🖼️', title: 'Image mystère', clue: `${clues[0]}\n\nRéponds avec *.devine nom*.`, answer: character.name, hint: clues.slice(1).join(' '), attempts: 0 };
+  clueGames.set(jid, game);
+  const image = await getAnimeCharacterImage(character.name);
+  const text = genericGuessText(game);
+  if (!(await sendImage(sock, jid, image, text))) await reply(repondre, text);
 });
 ovlcmd({ nom_cmd: 'tierlist', alias: ['classementanime'], classe: 'Fun', react: '📊', desc: 'Lance une tier list anime.' }, async (jid, sock, { repondre }) => {
   if (!groupOnly(jid, repondre)) return;
