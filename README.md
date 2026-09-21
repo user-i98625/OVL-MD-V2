@@ -250,7 +250,7 @@ Les commandes présentes dans `cmd/` sont chargées normalement. Les plugins dis
 
 La commande `.quizz <animé>` cherche une banque déjà enregistrée. Par exemple, `.quizz yu gi oh` utilise le cache si la banque existe ; sinon, le bot génère 30 questions à choix multiples en français, les valide et les sauvegarde dans `lib/quiz_cache/`. Le créateur choisit ensuite 10, 20 ou 30 questions comme pour les autres quizz. Pour régénérer volontairement une banque, utilise `.quizz-refresh <animé>`.
 
-La génération automatique nécessite la variable secrète `OPENAI_API_KEY` dans Render. Une variable optionnelle `QUIZ_AI_MODEL` permet de choisir le modèle, et `QUIZ_AI_BASE_URL` permet d’utiliser un endpoint compatible OpenAI. Le cache évite de régénérer les questions à chaque partie ; il peut toutefois être perdu lors d’un redéploiement si l’hébergeur ne fournit pas de disque persistant.
+La génération automatique nécessite une variable secrète Render nommée exactement `OPENAI_API_KEY` (sans espace, sans guillemets et avec la clé complète). La commande `.gpt` utilise également cette même clé et appelle directement `https://api.openai.com/v1/chat/completions`, au lieu de dépendre d’une API intermédiaire. Une variable optionnelle `OPENAI_MODEL` ou `QUIZ_AI_MODEL` permet de choisir le modèle, et `OPENAI_API_BASE` ou `QUIZ_AI_BASE_URL` permet d’utiliser un endpoint compatible OpenAI. Après toute modification des variables Render, il faut sauvegarder puis effectuer un nouveau déploiement. Le bot affiche désormais une erreur distincte pour une clé absente, refusée (401), un quota épuisé (429) ou un modèle introuvable (404).
 
 ### ✨ Pack de divertissement anime
 
