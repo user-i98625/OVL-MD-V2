@@ -254,17 +254,86 @@ ovlcmd({ nom_cmd: 'choix', alias: ['choice'], classe: 'Fun', react: '🧭', desc
   const next = adventures[game.step]; await reply(repondre, `🧭 Choix enregistré par @${userName(auteur_Message)}.\n\n${next.text}\n\n1️⃣ ${next.choices[0]}\n2️⃣ ${next.choices[1]}\n3️⃣ ${next.choices[2]}`);
 });
 
+const RPG_ITEMS = {
+  potion: { name: 'Potion', price: 25, effect: 'Restaure 25 PV.' },
+  elixir: { name: 'Élixir', price: 60, effect: 'Restaure tous les PV.' },
+  kunai: { name: 'Kunai renforcé', price: 90, effect: '+12 attaque en combat.' },
+  grimoire: { name: 'Grimoire ancien', price: 120, effect: '+15 attaque en combat.' }
+};
+const RPG_MENU = `🛡️ *MENU RPG ANIME*
+
+🧑‍🎤 *.rpg* — créer/voir ton héros
+📜 *.rpgprofil* — fiche détaillée
+🎒 *.rpginventaire* — objets et pièces
+🛒 *.rpgshop* — boutique (\.rpgshop buy potion)
+🎁 *.rpgdaily* — récompense quotidienne
+⚔️ *.rpg mission* — mission rapide
+🏹 *.rpgchasse* — chasser un monstre
+🩹 *.rpgsoin* — récupérer des PV
+🥊 *.rpgduel @membre* — duel amical
+🐉 *.rpgboss* — lancer/rejoindre un boss coopératif
+🏆 *.rpgrank* — classement du groupe
+🛑 *.stoprpg* — arrêter les activités RPG`;
+
+function rpgPlayer(game, jid) {
+  if (!game.players.has(jid)) game.players.set(jid, {
+    class: pick(classes), level: 1, xp: 0, hp: 100, maxHp: 100,
+    gold: 100, wins: 0, hunts: 0, inventory: { potion: 1 }, lastDaily: 0,
+    lastMission: 0, attack: 10
+  });
+  const player = game.players.get(jid);
+  player.maxHp = player.maxHp || 100 + Math.max(0, player.level - 1) * 10;
+  player.gold = Number.isFinite(player.gold) ? player.gold : 0;
+  player.inventory = player.inventory || {};
+  return player;
+}
+
+function rpgMention(jid) { return `@${userName(jid)}`; }
+function rpgGainXp(player, amount) {
+  player.xp += amount;
+  let levels = 0;
+  while (player.xp >= 100) { player.xp -= 100; player.level += 1; player.maxHp += 10; player.hp = player.maxHp; levels += 1; }
+  return levels;
+}
+function getRpgGame(jid) {
+  let game = rpgGames.get(jid);
+  if (!game) { game = { players: new Map(), boss: null }; rpgGames.set(jid, game); }
+  game.boss = game.boss || null;
+  return game;
+}
+
+ovlcmd({ nom_cmd: 'rpgmenu', alias: ['menurpg', 'rpghelp'], classe: 'Fun', react: '📖', desc: 'Affiche le menu complet du RPG.' }, async (jid, sock, { repondre }) => {
+  if (!groupOnly(jid, repondre)) return;
+  await reply(repondre, RPG_MENU);
+});
+ovlcmd({ nom_cmd: 'menuanime', alias: ['funmenu', 'menujeuxanime'], classe: 'Fun', react: '🎮', desc: 'Affiche le menu des jeux et activités anime.' }, async (jid, sock, { repondre }) => {
+  await reply(repondre, `🎮 *MENU JEUX & ANIME*\n\n🧠 *.quizz-anime* — quiz anime\n🧞 *.akinator* — Akinator en groupe\n🕵️ *.quisuisje* — deviner un personnage\n🎵 *.opening* — deviner un opening\n🏆 *.tournoi* — tournoi par votes\n🗺️ *.aventure* — aventure interactive\n🎭 *.actionverite* — action ou vérité\n🎯 *.bingoanime* — bingo anime\n\n${RPG_MENU}`);
+});
+
 ovlcmd({ nom_cmd: 'rpg', alias: ['rpganime', 'roleplay'], classe: 'Fun', react: '🛡️', desc: 'Crée ou affiche le RPG anime du groupe.' }, async (jid, sock, { repondre, auteur_Message, arg }) => {
   if (!groupOnly(jid, repondre)) return;
-  let game = rpgGames.get(jid);
-  if (!game) { game = { players: new Map() }; rpgGames.set(jid, game); }
+  const game = getRpgGame(jid);
   const input = clean(textArg(arg));
-  if (!game.players.has(auteur_Message) || input === 'creer') game.players.set(auteur_Message, { class: pick(classes), level: 1, xp: 0, hp: 100 });
-  const player = game.players.get(auteur_Message);
-  if (input === 'mission' || input === 'quete') { player.xp += 25; if (player.xp >= 100) { player.level += 1; player.xp -= 100; } await reply(repondre, `⚔️ Mission accomplie ! @${userName(auteur_Message)} gagne 25 XP. Niveau ${player.level}, XP ${player.xp}/100.`); return; }
-  await reply(repondre, `🛡️ *RPG DU GROUPE*\n\n@${userName(auteur_Message)}\nClasse : ${player.class}\nNiveau : ${player.level}\nXP : ${player.xp}/100\nPV : ${player.hp}\n\nUtilise `.replace('`', '') + `.rpg mission pour gagner de l’XP.`);
+  const player = rpgPlayer(game, auteur_Message);
+  if (input === 'menu' || input === 'help') { await reply(repondre, RPG_MENU); return; }
+  if (input === 'mission' || input === 'quete') {
+    const now = Date.now();
+    if (now - player.lastMission < 30000) { await reply(repondre, '⏳ Cette mission se recharge dans quelques secondes.'); return; }
+    player.lastMission = now; const levels = rpgGainXp(player, 25); player.gold += 20;
+    await reply(repondre, `⚔️ Mission accomplie ! ${rpgMention(auteur_Message)} gagne *25 XP* et *20 pièces*.\nNiveau ${player.level} — XP ${player.xp}/100${levels ? `\n⬆️ Niveau supérieur ! PV restaurés.` : ''}`); return;
+  }
+  await reply(repondre, `🛡️ *RPG DU GROUPE*\n\n${rpgMention(auteur_Message)}\nClasse : ${player.class}\nNiveau : ${player.level}\nXP : ${player.xp}/100\nPV : ${player.hp}/${player.maxHp}\n🪙 Pièces : ${player.gold}\n🎒 Objets : ${Object.entries(player.inventory).map(([key, value]) => `${RPG_ITEMS[key]?.name || key} x${value}`).join(', ') || 'aucun'}\n\nTape *.rpgmenu* pour toutes les mécaniques.`);
 });
-ovlcmd({ nom_cmd: 'rpgstats', alias: ['statsrpg'], classe: 'Fun', react: '📜', desc: 'Affiche les héros du RPG.' }, async (jid, sock, { repondre }) => { const game = rpgGames.get(jid); if (!game || !game.players.size) { await reply(repondre, 'ℹ️ Le RPG n’a pas encore commencé.'); return; } const text = [...game.players.entries()].map(([user, player]) => `@${userName(user)} — ${player.class}, niv. ${player.level}, ${player.xp} XP`).join('\n'); await reply(repondre, `📜 *HÉROS DU GROUPE*\n\n${text}`); });
+ovlcmd({ nom_cmd: 'rpgprofil', alias: ['profilrpg', 'heros'], classe: 'Fun', react: '🧑‍🎤', desc: 'Affiche la fiche détaillée de ton héros.' }, async (jid, sock, { repondre, auteur_Message }) => { if (!groupOnly(jid, repondre)) return; const player = rpgPlayer(getRpgGame(jid), auteur_Message); await reply(repondre, `🧑‍🎤 *FICHE DE ${userName(auteur_Message)}*\n\nClasse : *${player.class}*\nNiveau : *${player.level}*\nXP : ${player.xp}/100\nPV : ${player.hp}/${player.maxHp}\n⚔️ Attaque : ${player.attack + player.level * 3}\n🪙 Or : ${player.gold}\n🏅 Victoires : ${player.wins}\n🏹 Chasses : ${player.hunts}`); });
+ovlcmd({ nom_cmd: 'rpginventaire', alias: ['inventairerpg', 'sacrpg'], classe: 'Fun', react: '🎒', desc: 'Affiche ton inventaire RPG.' }, async (jid, sock, { repondre, auteur_Message }) => { if (!groupOnly(jid, repondre)) return; const player = rpgPlayer(getRpgGame(jid), auteur_Message); const items = Object.entries(player.inventory).filter(([, count]) => count > 0).map(([key, count]) => `• ${RPG_ITEMS[key]?.name || key} x${count} — ${RPG_ITEMS[key]?.effect || ''}`); await reply(repondre, `🎒 *INVENTAIRE*\n\n${items.join('\n') || 'Ton sac est vide.'}\n\n🪙 Pièces : ${player.gold}`); });
+ovlcmd({ nom_cmd: 'rpgshop', alias: ['shoprpg', 'boutiquerpg'], classe: 'Fun', react: '🛒', desc: 'Consulte la boutique ou achète un objet RPG.' }, async (jid, sock, { repondre, auteur_Message, arg }) => { if (!groupOnly(jid, repondre)) return; const game = getRpgGame(jid); const player = rpgPlayer(game, auteur_Message); const tokens = textArg(arg).toLowerCase().split(/\s+/); if (tokens[0] !== 'buy' && tokens[0] !== 'acheter') { await reply(repondre, `🛒 *BOUTIQUE RPG*\n\n${Object.entries(RPG_ITEMS).map(([key, item]) => `• *${key}* — ${item.name}, ${item.price} 🪙 (${item.effect})`).join('\n')}\n\nAcheter : *.rpgshop buy potion*`); return; } const key = tokens[1]; const item = RPG_ITEMS[key]; if (!item) { await reply(repondre, '❌ Objet inconnu. Utilise *.rpgshop* pour voir la boutique.'); return; } if (player.gold < item.price) { await reply(repondre, `❌ Il te manque ${item.price - player.gold} 🪙.`); return; } player.gold -= item.price; player.inventory[key] = (player.inventory[key] || 0) + 1; await reply(repondre, `✅ ${item.name} acheté ! Il te reste ${player.gold} 🪙.`); });
+ovlcmd({ nom_cmd: 'rpgdaily', alias: ['daily-rpg', 'bonusrpg'], classe: 'Fun', react: '🎁', desc: 'Récupère la récompense quotidienne RPG.' }, async (jid, sock, { repondre, auteur_Message }) => { if (!groupOnly(jid, repondre)) return; const player = rpgPlayer(getRpgGame(jid), auteur_Message); if (Date.now() - player.lastDaily < 86400000) { await reply(repondre, '⏳ Tu as déjà récupéré ton bonus aujourd’hui.'); return; } player.lastDaily = Date.now(); player.gold += 100; rpgGainXp(player, 20); await reply(repondre, `🎁 Bonus quotidien récupéré par ${rpgMention(auteur_Message)} : *100 🪙 et 20 XP* !`); });
+ovlcmd({ nom_cmd: 'rpgsoin', alias: ['soinrpg', 'healrpg'], classe: 'Fun', react: '🩹', desc: 'Restaure les PV avec une potion ou des pièces.' }, async (jid, sock, { repondre, auteur_Message }) => { if (!groupOnly(jid, repondre)) return; const player = rpgPlayer(getRpgGame(jid), auteur_Message); if (player.hp >= player.maxHp) { await reply(repondre, '💚 Tes PV sont déjà au maximum.'); return; } if (player.inventory.potion > 0) { player.inventory.potion -= 1; player.hp = Math.min(player.maxHp, player.hp + 25); await reply(repondre, `🩹 Potion utilisée : ${player.hp}/${player.maxHp} PV.`); return; } if (player.gold < 30) { await reply(repondre, '❌ Il faut une potion ou 30 🪙 pour te soigner.'); return; } player.gold -= 30; player.hp = Math.min(player.maxHp, player.hp + 50); await reply(repondre, `✨ Soin payé : ${player.hp}/${player.maxHp} PV.`); });
+ovlcmd({ nom_cmd: 'rpgchasse', alias: ['chasserpg', 'hunt'], classe: 'Fun', react: '🏹', desc: 'Chasse un monstre pour gagner XP et or.' }, async (jid, sock, { repondre, auteur_Message }) => { if (!groupOnly(jid, repondre)) return; const player = rpgPlayer(getRpgGame(jid), auteur_Message); if (player.hp < 15) { await reply(repondre, '🩹 Tu es trop blessé. Utilise *.rpgsoin*.'); return; } const monster = pick(['Slime royal', 'Loup spectral', 'Golem de lave', 'Araignée abyssale']); const damage = 5 + Math.floor(Math.random() * 20); const gold = 25 + Math.floor(Math.random() * 45); player.hp = Math.max(1, player.hp - damage); player.gold += gold; player.hunts += 1; const levels = rpgGainXp(player, 30); await reply(repondre, `🏹 ${rpgMention(auteur_Message)} vainc un *${monster}* !\n💥 -${damage} PV | 🪙 +${gold} | ✨ +30 XP${levels ? `\n⬆️ Niveau ${player.level} !` : ''}`); });
+ovlcmd({ nom_cmd: 'rpgduel', alias: ['duelrpg', 'pvp-rpg'], classe: 'Fun', react: '🥊', desc: 'Défie un membre du groupe en duel RPG.' }, async (jid, sock, { repondre, auteur_Message, arg }) => { if (!groupOnly(jid, repondre)) return; const target = targetFrom(arg, null); if (!target || target === auteur_Message) { await reply(repondre, '❌ Mentionne un autre membre : *.rpgduel @membre*.'); return; } const game = getRpgGame(jid); const attacker = rpgPlayer(game, auteur_Message); const defender = rpgPlayer(game, target); const powerA = attacker.attack + attacker.level * 3 + Math.floor(Math.random() * 31); const powerB = defender.attack + defender.level * 3 + Math.floor(Math.random() * 31); const winner = powerA >= powerB ? auteur_Message : target; const loser = winner === auteur_Message ? target : auteur_Message; const winnerPlayer = game.players.get(winner); winnerPlayer.wins += 1; winnerPlayer.gold += 40; rpgGainXp(winnerPlayer, 20); const text = `🥊 *DUEL RPG*\n\n${rpgMention(auteur_Message)} ⚔️ ${powerA}\n${rpgMention(target)} ⚔️ ${powerB}\n\n🏆 Victoire : ${rpgMention(winner)}\n💰 +40 🪙 et +20 XP pour le vainqueur !`; if (sock && typeof sock.sendMessage === 'function') await sock.sendMessage(jid, { text, mentions: [auteur_Message, target, winner, loser] }); else await reply(repondre, text); });
+ovlcmd({ nom_cmd: 'rpgboss', alias: ['bossrpg', 'raidboss'], classe: 'Fun', react: '🐉', desc: 'Lance ou attaque un boss coopératif de groupe.' }, async (jid, sock, { repondre, auteur_Message, arg }) => { if (!groupOnly(jid, repondre)) return; const game = getRpgGame(jid); const player = rpgPlayer(game, auteur_Message); const input = clean(textArg(arg)); if (!game.boss || input === 'start' || input === 'lancer') { game.boss = { name: pick(['Dragon céleste', 'Roi démon', 'Titan ancestral', 'Bête à neuf queues']), hp: 500, maxHp: 500, attackers: new Set() }; await reply(repondre, `🐉 *RAID BOSS LANCÉ*\n\n${game.boss.name} — ${game.boss.hp}/${game.boss.maxHp} PV\n\nChaque joueur attaque avec *.rpgboss hit*.\nLe boss disparaît après sa défaite.`); return; } if (!['hit', 'attaque', 'attack'].includes(input)) { await reply(repondre, `🐉 Boss actuel : *${game.boss.name}* — ${game.boss.hp}/${game.boss.maxHp} PV\nUtilise *.rpgboss hit* pour attaquer.`); return; } const damage = player.attack + player.level * 4 + Math.floor(Math.random() * 25); game.boss.hp = Math.max(0, game.boss.hp - damage); game.boss.attackers.add(auteur_Message); if (game.boss.hp > 0) { await reply(repondre, `⚔️ ${rpgMention(auteur_Message)} inflige *${damage} dégâts* !\n🐉 ${game.boss.name} : ${game.boss.hp}/${game.boss.maxHp} PV`); return; } const participants = [...game.boss.attackers]; const reward = Math.floor(150 / Math.max(1, participants.length)); for (const user of participants) { const hero = rpgPlayer(game, user); hero.gold += reward; rpgGainXp(hero, 60); hero.wins += 1; } const text = `🏆 *BOSS VAINCU !*\n\n${game.boss.name} a été vaincu par ${participants.map(rpgMention).join(', ')}.\n🎁 Chaque participant reçoit ${reward} 🪙 et 60 XP !`; game.boss = null; if (sock && typeof sock.sendMessage === 'function') await sock.sendMessage(jid, { text, mentions: participants }); else await reply(repondre, text); });
+ovlcmd({ nom_cmd: 'rpgstats', alias: ['statsrpg'], classe: 'Fun', react: '📜', desc: 'Affiche les héros du RPG.' }, async (jid, sock, { repondre }) => { const game = rpgGames.get(jid); if (!game || !game.players.size) { await reply(repondre, 'ℹ️ Le RPG n’a pas encore commencé.'); return; } const text = [...game.players.entries()].sort((a, b) => b[1].level - a[1].level || b[1].xp - a[1].xp).map(([user, player], index) => `${index + 1}. @${userName(user)} — ${player.class}, niv. ${player.level}, ${player.xp} XP`).join('\n'); await reply(repondre, `📜 *HÉROS DU GROUPE*\n\n${text}`); });
+ovlcmd({ nom_cmd: 'rpgrank', alias: ['rankrpg', 'classementrpg'], classe: 'Fun', react: '🏆', desc: 'Classe les héros du groupe par niveau.' }, async (jid, sock, { repondre }) => { const game = rpgGames.get(jid); if (!game || !game.players.size) { await reply(repondre, 'ℹ️ Aucun héros enregistré.'); return; } const text = [...game.players.entries()].sort((a, b) => (b[1].level * 100 + b[1].xp) - (a[1].level * 100 + a[1].xp)).slice(0, 10).map(([user, player], index) => `${['🥇', '🥈', '🥉'][index] || `${index + 1}.`} @${userName(user)} — niveau ${player.level}`).join('\n'); await reply(repondre, `🏆 *CLASSEMENT RPG*\n\n${text}`); });
 
 ovlcmd({ nom_cmd: 'meteoanime', alias: ['weatheranime'], classe: 'Fun', react: '🌤️', desc: 'Affiche la météo d’un monde anime.' }, async (jid, sock, { repondre, arg }) => { const place = textArg(arg) || pick(worlds); await reply(repondre, `🌤️ *Météo de ${place}*\n\n${pick(['Ciel dramatique et vent héroïque.', 'Pluie légère, parfaite pour un flashback.', 'Soleil intense : transformation imminente.', 'Orage de niveau boss final.'])}\nTempérature : ${Math.floor(12 + Math.random() * 25)}°C`); });
 ovlcmd({ nom_cmd: 'horoscopeanime', alias: ['horoscope'], classe: 'Fun', react: '🔮', desc: 'Donne un horoscope anime.' }, async (jid, sock, { repondre, auteur_Message }) => { const character = pick(characters); await reply(repondre, `🔮 *Horoscope de @${userName(auteur_Message)}*\n\nTon énergie ressemble à celle de *${character.name}*.\nChance : ${Math.floor(50 + Math.random() * 51)}%\nConseil : ${pick(['fais confiance à ton équipe', 'évite les spoilers', 'prépare ton attaque spéciale', 'ne sous-estime jamais le rival'])}.`); });
