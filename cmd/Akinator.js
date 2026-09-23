@@ -135,7 +135,7 @@ async function sendGuess(groupId, sock, client) {
   const win = client.winResult || {};
   let text = `🔮 *Akinator propose :*\n\n*${win.name || 'un personnage inconnu'}*`;
   if (win.description) text += `\n\n${win.description}`;
-  text += '\n\nRéponds *oui* si c’est correct, ou *non* pour continuer.';
+  text += '\n\nRéponds *1* si c’est correct, ou *2* pour continuer.';
   await sock.sendMessage(groupId, { text });
   if (win.pictureUrl) {
     try {
@@ -154,6 +154,7 @@ async function waitForGuessConfirmation(groupId, sock, session, getJid) {
     const answer = clean(extractText(received));
     const player = await resolveSender(received, groupId, sock, getJid);
     if (!player) continue;
+    if (!sameUser(player, session.starter)) continue;
     if (isStopCommand(answer)) {
       if (await canStop(sock, groupId, player, session.starter)) {
         endSession(groupId);
@@ -162,8 +163,8 @@ async function waitForGuessConfirmation(groupId, sock, session, getJid) {
       }
       continue;
     }
-    if (['oui', 'yes', '1', 'o'].includes(answer)) return true;
-    if (['non', 'no', '2', 'n'].includes(answer)) return false;
+    if (answer === '1') return true;
+    if (answer === '2') return false;
   }
   return null;
 }
@@ -182,6 +183,7 @@ async function runAkinator(groupId, sock, session, getJid) {
       const answer = clean(extractText(received));
       const player = await resolveSender(received, groupId, sock, getJid);
       if (!player) continue;
+      if (!sameUser(player, session.starter)) continue;
       if (isStopCommand(answer)) {
         if (await canStop(sock, groupId, player, session.starter)) {
           endSession(groupId);
@@ -190,7 +192,7 @@ async function runAkinator(groupId, sock, session, getJid) {
         }
         continue;
       }
-      if (!Object.prototype.hasOwnProperty.call(RESPONSE_MAP, answer)) {
+      if (!/^[1-5]$/.test(answer) || !Object.prototype.hasOwnProperty.call(RESPONSE_MAP, answer)) {
         await sock.sendMessage(groupId, { text: `❌ Réponse invalide. ${RESPONSE_HELP}` });
         continue;
       }
@@ -218,7 +220,11 @@ async function runAkinator(groupId, sock, session, getJid) {
     if (sessions.get(groupId) !== session) return;
     endSession(groupId);
     console.error('[Akinator]', error);
-    await sock.sendMessage(groupId, { text: '❌ Akinator est temporairement indisponible. Réessaie dans quelques instants.' });
+    const detail = error?.userMessage || error?.message || '';
+    const antiBot = /exclude|blocked|vital|scraper|403|cloudflare/i.test(detail);
+    await sock.sendMessage(groupId, { text: antiBot
+      ? '❌ Akinator est bloqué au moment de continuer après la proposition. Ajoute SCRAPER_API_KEY dans Render puis redéploie.'
+      : '❌ Akinator est temporairement indisponible. Réessaie dans quelques instants.' });
   }
 }
 
@@ -240,7 +246,14 @@ ovlcmd({
   const session = {
     groupId: jid,
     starter: auteur_Message,
-    client: new AkinatorClient({ language: Languages.French, theme: Themes.Character, childMode: true, retries: 2 }),
+    client: new AkinatorClient({
+      language: Languages.French,
+      theme: Themes.Character,
+      childMode: true,
+      retries: 2,
+      scraperApiKey: process.env.SCRAPER_API_KEY || undefined,
+      scraperApiSession: process.env.SCRAPER_API_SESSION ? Number(process.env.SCRAPER_API_SESSION) : undefined
+    }),
     timer: null
   };
   sessions.set(jid, session);
