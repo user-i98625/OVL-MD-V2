@@ -5,3 +5,4 @@ config_env.json
 cache_jid.json
 store_msg.json
 lib/quiz_cache/
+lib/onepiece_data.json

@@ -273,6 +273,7 @@ const RPG_MENU = `🛡️ *MENU RPG ANIME*
 🥊 *.rpgduel @membre* — duel amical
 🐉 *.rpgboss* — lancer/rejoindre un boss coopératif
 🏆 *.rpgrank* — classement du groupe
+🏴‍☠️ *.opmenu* — One Piece World Tour complet
 🛑 *.stoprpg* — arrêter les activités RPG`;
 
 function rpgPlayer(game, jid) {

@@ -262,6 +262,14 @@ Le RPG propose désormais une fiche de héros avec niveau, XP, PV, classe, or et
 
 Les parties créatives utilisent l’identifiant du groupe pour éviter les mélanges entre groupes. Les commandes `.histoire`, `.aventure`, `.rpg` et les jeux de devinettes gardent leur état en mémoire pendant l’exécution du bot ; un redémarrage réinitialise les parties en cours. Les scores fun actuels sont également en mémoire, tandis que les scores des quiz restent gérés par le module de jeux existant.
 
+### 🏴‍☠️ One Piece World Tour OVL
+
+Le bot possède maintenant un mode RPG One Piece indépendant, inspiré des boucles de progression de Koya mais avec ses propres données et ses propres règles. `.opmenu` affiche le menu complet. `.opchoisir humain pirate` crée un personnage ; les races disponibles sont Humain, Homme-poisson, Mink, Géant et Skypien, tandis que les classes sont Pirate, Marine, Chasseur de primes, Médecin et Navigateur.
+
+Les commandes principales sont `.opprofil`, `.opguide`, `.opchapitre`, `.opchapitre next`, `.opquete`, `.opquete claim`, `.opmission`, `.opdaily`, `.opcombat`, `.opboss start`, `.opboss hit`, `.opcolisee`, `.opprime`, `.opclassement`, `.ophaki`, `.optrain`, `.oparme`, `.opfruit`, `.opinventaire`, `.opshop`, `.opacheter`, `.oplootbox`, `.opbateau build`, `.opexpedition start`, `.opexpedition collect`, `.opequipage`, `.opfleet`, `.oppeche`, `.opdenden` et `.opreset confirmer`.
+
+Le système conserve les profils dans `lib/onepiece_data.json` avec une écriture atomique. Les profils comprennent le niveau, l’XP, l’énergie, les berries, la cola, les sea shards, le haki, l’arme, les chapitres, les combats, la prime, l’équipage, le bateau, les expéditions, les objets et les fruits. Pour Render, le disque local peut être éphémère ; configure un volume persistant ou définis `ONEPIECE_DATA_FILE` vers un emplacement persistant si tu veux conserver les profils après un redéploiement.
+
 ### 🧞 Akinator
 
 La commande `.akinator` lance une partie Akinator en français dans un groupe. Seul le créateur de la partie peut répondre aux questions et à la proposition finale ; les messages des autres membres sont ignorés silencieusement. Les réponses doivent être exactement numériques : `1` pour Oui, `2` pour Non, `3` pour Je ne sais pas, `4` pour Probablement oui ou `5` pour Probablement non. Quand Akinator propose un personnage, `1` confirme et `2` demande de continuer. Le créateur, un administrateur ou un sudo peut arrêter la partie avec `stop`, `.stopakinator` ou `.stopaki`. La version actuelle du client corrige la reprise après une proposition refusée. Pour franchir la protection anti-bot de l’endpoint de reprise, ajoute optionnellement `SCRAPER_API_KEY` et, si nécessaire, `SCRAPER_API_SESSION` dans Render. Une seule partie Akinator peut être active par groupe.
