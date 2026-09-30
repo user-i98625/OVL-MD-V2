@@ -1,4 +1,5 @@
 const { ovlcmd } = require('../lib/ovlcmd');
+const registry = require('../lib/ovl_registry');
 const axios = require('axios');
 
 const sessions = new Map();
@@ -302,6 +303,32 @@ function getRpgGame(jid) {
   game.boss = game.boss || null;
   return game;
 }
+
+function serializeRpg() {
+  return {
+    games: Object.fromEntries([...rpgGames.entries()].map(([jid, game]) => [jid, {
+      boss: game.boss ? { ...game.boss, attackers: [...(game.boss.attackers || [])] } : null,
+      players: Object.fromEntries(game.players.entries())
+    }])),
+    funScores: Object.fromEntries(funScores.entries())
+  };
+}
+function persistRpg() {
+  registry.set('rpg', 'state', serializeRpg()).catch((error) => console.error('[rpg] sauvegarde indisponible:', error.message));
+}
+async function hydrateRpg() {
+  try {
+    const state = await registry.get('rpg', 'state', null);
+    if (!state) return;
+    for (const [jid, saved] of Object.entries(state.games || {})) {
+      rpgGames.set(jid, { boss: saved.boss ? { ...saved.boss, attackers: new Set(saved.boss.attackers || []) } : null, players: new Map(Object.entries(saved.players || {})) });
+    }
+    for (const [jid, score] of Object.entries(state.funScores || {})) funScores.set(jid, Number(score) || 0);
+  } catch (error) { console.error('[rpg] restauration indisponible:', error.message); }
+}
+hydrateRpg();
+const rpgPersistenceTimer = setInterval(persistRpg, 5000);
+if (typeof rpgPersistenceTimer.unref === 'function') rpgPersistenceTimer.unref();
 
 ovlcmd({ nom_cmd: 'rpgmenu', alias: ['menurpg', 'rpghelp'], classe: 'Fun', react: '📖', desc: 'Affiche le menu complet du RPG.' }, async (jid, sock, { repondre }) => {
   if (!groupOnly(jid, repondre)) return;

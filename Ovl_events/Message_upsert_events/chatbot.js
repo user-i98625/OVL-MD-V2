@@ -27,7 +27,6 @@ function isEnabled(config, isGroup, chatId) {
 }
 
 async function legacyFallback(sender, botJid, text, reply) {
-  if (process.env.CHATBOT_LEGACY_FALLBACK === 'false') return;
   try {
     const response = await axios.get('https://uta-f1kg.onrender.com/chatbot', {
       params: { user_id: `${sender.split('@')[0]}_${botJid.split('@')[0]}`, text },
@@ -47,6 +46,15 @@ async function chatbot(sender, isGroup, text, reply, _enabledIds, chatId, altern
     if (!settings) return;
     const currentChat = cleanJid(chatId || alternateChatId);
     if (!isEnabled(settings, Boolean(isGroup), currentChat)) return;
+
+    // Mode historique : l’ancien service est volontairement limité à sa base de connaissances.
+    // CHATBOT_MODE=openai permet de désactiver ce comportement sans modifier le code.
+    if (String(process.env.CHATBOT_MODE || 'legacy').toLowerCase() === 'legacy') {
+      const before = Date.now();
+      await legacyFallback(cleanJid(sender), cleanJid(botJid), message, reply);
+      if (Date.now() - before < 100) console.warn('[chatbot] service historique sans réponse');
+      return;
+    }
 
     const config = getOpenAIConfig();
     if (!config) return legacyFallback(cleanJid(sender), cleanJid(botJid), message, reply);

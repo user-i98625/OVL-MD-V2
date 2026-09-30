@@ -1,6 +1,9 @@
 const { ovlcmd } = require('../lib/ovlcmd');
 const store = require('../lib/onepiece_store');
 
+// Restaure les profils, liens et progressions depuis PostgreSQL/SQLite au démarrage.
+store.hydrate().catch((error) => console.error('[onepiece] hydrate:', error.message));
+
 const MENU = `🏴‍☠️ *ONE PIECE WORLD TOUR — OVL*
 
 📌 *Départ et profil*

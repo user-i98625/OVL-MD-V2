@@ -301,3 +301,38 @@ Partage, pose tes questions, et reste à jour avec toutes les nouveautés du pro
 ### 📄 Licence
 
 Distribué sous la licence MIT. Voir le fichier [LICENSE](./LICENSE) pour plus d’informations.
+
+
+## Persistance des joueurs et du mode OVL
+
+Le dépôt contient désormais un registre commun `ovl_registry` pour les données qui ne doivent pas disparaître lors d’un redéploiement : profils One Piece, codes et liens de comptes, inventaires, progressions RPG et scores Fun.
+
+### Configuration Render obligatoire
+
+Créer une base PostgreSQL Render et ajouter son URL dans la variable :
+
+```text
+DATABASE=postgresql://...
+```
+
+`DATABASE_URL` et `OVL_DATABASE_URL` sont également acceptées par le registre commun, mais `DATABASE` reste nécessaire pour les anciens modèles Sequelize d’OVL-ECON-Y.
+
+Sans base PostgreSQL ou disque persistant Render, les fichiers locaux (`database.db`, `lib/onepiece_data.json` et le registre SQLite) peuvent être supprimés lors d’un nouveau déploiement. Il ne faut donc pas considérer un fichier local comme une sauvegarde de production.
+
+### Chatbot historique
+
+Le chatbot utilise maintenant par défaut l’ancien service historique, dont les connaissances sont limitées à l’ancienne période :
+
+```text
+CHATBOT_MODE=legacy
+CHATBOT_LEGACY_FALLBACK=true
+```
+
+Pour revenir au chatbot OpenAI moderne avec recherche web :
+
+```text
+CHATBOT_MODE=openai
+OPENAI_API_KEY=...
+```
+
+Le service historique est externe ; si son endpoint est indisponible, le bot journalise l’erreur sans bloquer le démarrage.
