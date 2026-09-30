@@ -270,6 +270,12 @@ Les commandes principales sont `.opprofil`, `.opguide`, `.opchapitre`, `.opchapi
 
 Le système conserve les profils dans `lib/onepiece_data.json` avec une écriture atomique. Les profils comprennent le niveau, l’XP, l’énergie, les berries, la cola, les sea shards, le haki, l’arme, les chapitres, les combats, la prime, l’équipage, le bateau, les expéditions, les objets et les fruits. Pour Render, le disque local peut être éphémère ; configure un volume persistant ou définis `ONEPIECE_DATA_FILE` vers un emplacement persistant si tu veux conserver les profils après un redéploiement.
 
+### 🌐 OVL World Tour multi-plateforme
+
+La liaison de compte est maintenant préparée sans exposer le numéro WhatsApp. `.oplink` génère un code aléatoire à usage unique valable dix minutes, `.oplinkstatus` affiche l’identifiant OVL lié et `.opunlink confirmer` supprime la liaison de cette identité. Le code n’est pas un mot de passe et ne doit être transmis qu’à une future application Discord OVL contrôlée par le propriétaire du projet.
+
+Le stockage contient désormais les comptes OVL, les identités liées et les codes temporaires. La prochaine étape consiste à créer le bot Discord officiel OVL avec `discord.js`, puis à lui faire appeler `redeemLinkCode()` via une API privée ou un adaptateur partagé. Koya ne sera pas automatisé ni contrôlé : OVL World Tour restera notre propre jeu, compatible WhatsApp et Discord.
+
 ### 🧞 Akinator
 
 La commande `.akinator` lance une partie Akinator en français dans un groupe. Seul le créateur de la partie peut répondre aux questions et à la proposition finale ; les messages des autres membres sont ignorés silencieusement. Les réponses doivent être exactement numériques : `1` pour Oui, `2` pour Non, `3` pour Je ne sais pas, `4` pour Probablement oui ou `5` pour Probablement non. Quand Akinator propose un personnage, `1` confirme et `2` demande de continuer. Le créateur, un administrateur ou un sudo peut arrêter la partie avec `stop`, `.stopakinator` ou `.stopaki`. La version actuelle du client corrige la reprise après une proposition refusée. Pour franchir la protection anti-bot de l’endpoint de reprise, ajoute optionnellement `SCRAPER_API_KEY` et, si nécessaire, `SCRAPER_API_SESSION` dans Render. Une seule partie Akinator peut être active par groupe.
