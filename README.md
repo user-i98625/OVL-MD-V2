@@ -252,7 +252,7 @@ La commande `.quizz <animé>` cherche une banque déjà enregistrée. Par exempl
 
 La génération automatique nécessite une variable secrète Render nommée exactement `OPENAI_API_KEY` (sans espace, sans guillemets et avec la clé complète). Ne mets jamais cette clé dans GitHub, le Dockerfile ou un fichier commité. La commande `.gpt` utilise cette clé. La commande `.aistatus` (réservée au propriétaire/sudo) vérifie la présence de la configuration sans révéler le secret. Les variables optionnelles `OPENAI_MODEL`, `OPENAI_QUIZ_MODEL` et `OPENAI_CHATBOT_MODEL` permettent de choisir séparément les modèles. `OPENAI_API_BASE` permet d’utiliser un endpoint compatible OpenAI ; sur Render, laisse-la vide pour utiliser l’API OpenAI officielle. Après toute modification des variables Render, sauvegarde puis effectue un nouveau déploiement.
 
-Le chatbot automatique utilise désormais OpenAI Responses API avec recherche web lorsque `OPENAI_API_KEY` est disponible. Les réponses récentes peuvent inclure une section `Sources` avec des liens cliquables. Si la recherche web est temporairement indisponible, le bot utilise un fallback sans recherche et le signale implicitement dans ses instructions. `OPENAI_CHATBOT_ALLOW_NO_SEARCH=false` permet de désactiver ce fallback. L’ancien service chatbot reste uniquement comme secours si aucune clé OpenAI n’est présente ; `CHATBOT_LEGACY_FALLBACK=false` le désactive.
+Le chatbot utilise exclusivement l’ancien service historique. Les variables OpenAI concernent uniquement `.gpt` et les quiz thématiques ; elles ne sont pas nécessaires au chatbot.
 
 ### ✨ Pack de divertissement anime
 
@@ -321,18 +321,4 @@ Sans base PostgreSQL ou disque persistant Render, les fichiers locaux (`database
 
 ### Chatbot historique
 
-Le chatbot utilise maintenant par défaut l’ancien service historique, dont les connaissances sont limitées à l’ancienne période :
-
-```text
-CHATBOT_MODE=legacy
-CHATBOT_LEGACY_FALLBACK=true
-```
-
-Pour revenir au chatbot OpenAI moderne avec recherche web :
-
-```text
-CHATBOT_MODE=openai
-OPENAI_API_KEY=...
-```
-
-Le service historique est externe ; si son endpoint est indisponible, le bot journalise l’erreur sans bloquer le démarrage.
+Le bot utilise exclusivement l’ancien service chatbot historique, dont les connaissances sont limitées à l’ancienne période. Aucune variable `CHATBOT_MODE`, `CHATBOT_LEGACY_FALLBACK` ou clé OpenAI n’est nécessaire pour le chatbot. Il suffit d’activer le chatbot avec `.chatbot on`. Le service historique est externe ; s’il est indisponible, le bot journalise l’erreur sans bloquer le démarrage.
